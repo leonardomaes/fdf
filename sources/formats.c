@@ -115,3 +115,21 @@ void    draw_screen(t_data *data)
 {
 	my_mlx_pixel_put(data, data->x, data->y, GREEN_PIXEL);
 }
+
+void    print_fdf(t_data *img)
+{
+    int     i;
+    int     x;
+    int     y;
+
+    i = 0;
+    if (number_check(&img) == 0)
+		exit(1);
+    while (img->line[i])
+    {
+        x = WINDOW_WIDTH / ft_strlen(img->line[i]);
+        y = WINDOW_HEIGHT / (img->rows - i);
+        my_mlx_pixel_put(img, x, y, GREEN_PIXEL);
+        i++;
+    }
+}

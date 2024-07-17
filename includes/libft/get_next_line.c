@@ -1,107 +1,110 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmaes <lmaes@student.42porto.com>          +#+  +:+       +#+        */
+/*   By: sheila <sheila@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/02 11:12:49 by lmaes             #+#    #+#             */
-/*   Updated: 2024/07/02 11:12:51 by lmaes            ###   ########.fr       */
+/*   Created: 2023/11/24 19:19:51 by shrodrig          #+#    #+#             */
+/*   Updated: 2024/06/11 17:54:50 by sheila           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*get_line(int fd, char *backup)
-{
-	int		read_bytes;
-	char	*buffer;
-
-	read_bytes = 1;
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (NULL);
-	while (read_bytes != 0 && !ft_strchr(backup, '\n'))
-	{
-		read_bytes = read(fd, buffer, BUFFER_SIZE);
-		if (read_bytes == -1)
-		{
-			free(backup);
-			free(buffer);
-			return (NULL);
-		}
-		buffer[read_bytes] = '\0';
-		backup = ft_strjoin(backup, buffer);
-	}
-	free(buffer);
-	return (backup);
-}
-
-char	*dup_line(char *backup)
+char	*ft_get_line(char *str)
 {
 	char	*line;
-	size_t		i;
+	int		i;
 
 	i = 0;
-	if (!backup[i])
+	if (!str[i])
 		return (NULL);
-	while (backup[i] != '\n' && backup[i])
+	while (str[i] && str[i] != '\n')
 		i++;
-	line = malloc((i + 2) * sizeof(char));
+	if (str[i] == '\0')
+		line = (char *)malloc(sizeof(char) * i + 1);
+	else
+		line = (char *)malloc(sizeof(char) * i + 2);
 	if (!line)
 		return (NULL);
 	i = 0;
-	while (backup[i] && backup[i] != '\n')
+	while (str[i] && str[i] != '\n')
 	{
-		line[i] = backup[i];
+		line[i] = str[i];
 		i++;
 	}
-	if (backup[i] == '\n')
-	{
-		line[i] = '\n';
-		i++;
-	}
+	if (str[i] == '\n')
+		line[i++] = '\n';
 	line[i] = '\0';
 	return (line);
 }
 
-char	*new_line(char *backup)
+char	*ft_get_newstr(char *str)
 {
+	char	*newstr;
 	int		i;
 	int		j;
-	char	*new_line;
 
 	i = 0;
-	while (backup[i] && backup[i] != '\n')
+	while (str[i] && str[i] != '\n')
 		i++;
-	if (!backup[i])
+	if (!str[i])
 	{
-		free(backup);
+		free(str);
 		return (NULL);
 	}
-	i++;
-	new_line = (char *)malloc(sizeof(char) * (ft_strlen(backup) - i + 1));
-	if (!new_line)
+	newstr = (char *)malloc(sizeof(char) * ft_strlen(str) - i);
+	if (!newstr)
 		return (NULL);
 	j = 0;
-	while (backup[i])
-		new_line[j++] = backup[i++];
-	new_line[j] = '\0';
-	free(backup);
-	return (new_line);
+	i++;
+	while (str[i])
+		newstr[j++] = str[i++];
+	newstr[j] = '\0';
+	free(str);
+	return (newstr);
+}
+
+char	*ft_read_line(int fd, char *str)
+{
+	char	*buffer;
+	int		bytesread;
+
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (NULL);
+	bytesread = 1;
+	while (!ft_strchr_gnl(str, '\n') && bytesread != 0)
+	{
+		bytesread = read(fd, buffer, BUFFER_SIZE);
+		if (bytesread == -1)
+		{
+			free (buffer);
+			free (str);
+			return (NULL);
+		}
+		buffer[bytesread] = '\0';
+		str = ft_strjoin_gnl(str, buffer);
+	}
+	free(buffer);
+	if (ft_strlen(str) != 0)
+		return (str);
+	free(str);
+	return (NULL);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*backup[MAX_FILES];
 	char		*line;
+	static char	*str;
 
-	if (fd < 0 || fd > MAX_FILES || BUFFER_SIZE <= 0)
+	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	backup[fd] = get_line(fd, backup[fd]);
-	if (!backup[fd])
+	str = ft_read_line (fd, str);
+	if (!str)
 		return (NULL);
-	line = dup_line(backup[fd]);
-	backup[fd] = new_line(backup[fd]);
+	line = ft_get_line(str);
+	str = ft_get_newstr(str);
 	return (line);
 }

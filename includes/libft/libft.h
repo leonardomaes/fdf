@@ -82,14 +82,12 @@ char		*ft_uitoa(unsigned int n);
 
 // Main functions
 char	*get_next_line(int fd);
-char	*get_line(int fd, char *backup);
-char	*dup_line(char *backup);
-char	*new_line(char *backup);
+char	*ft_get_line(char *str);
+char	*ft_get_newstr(char *str);
+char	*ft_read_line(int fd, char *str);
 
 // Utils functions
-char	*ft_strchr_gnl(const char *str, int c);
-char	*ft_strjoin_gnl(char *buffer, char *content);
-char	*ft_strdup_gnl(const char *s);
-size_t	ft_strlen_gnl(const char *str);
+int	ft_strchr_gnl(char *str, int c);
+char	*ft_strjoin_gnl(char *str, char *buffer);
 
 #endif

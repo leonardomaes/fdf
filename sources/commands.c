@@ -28,33 +28,40 @@ int	render(t_data *data)
 }
 // KEYBOARD COMMANDS
 
-int draw_keypress(int keysym, t_data *data)
+int	check_key(int keysym, t_data *data)
 {
-	if (keysym == XK_Up || keysym == XK_w)
-		data->y -= 10;
-	if (keysym == XK_Down || keysym == XK_s)
-		data->y += 10;
-	if (keysym == XK_Left || keysym == XK_a)
-		data->x -= 10;
-	if (keysym == XK_Right || keysym == XK_d)
-		data->x += 10;
-	return (0);
-}
-
-int	check_key(int keycode, t_data *data)
-{
-	if (keycode == ESC)
+	if (keysym == ESC)
 	{
 		mlx_destroy_window(data->mlx, data->win);
 		data->win = NULL;
+		write(1, "Closed\n", 7);
 	}
-	else if (keycode == W)
+	else if (keysym == XK_Up || keysym == XK_w)
+	{
 		data->y -= 10;
-	else if (keycode == S)
+		my_mlx_pixel_put(data, data->x, data->y, GREEN_PIXEL);
+		write(1, "w\n", 2);
+	}
+	else if (keysym == XK_Down || keysym == XK_s)
+	{
 		data->y += 10;
-	else if (keycode == A)
+		my_mlx_pixel_put(data, data->x, data->y, RED_PIXEL);
+		write(1, "s\n", 2);
+	}
+	else if (keysym == XK_Left || keysym == XK_a)
+	{
 		data->x -= 10;
-	else if (keycode == D)
+		my_mlx_pixel_put(data, data->x, data->y, GREEN_PIXEL);
+		write(1, "a\n", 2);
+	}
+	else if (keysym == XK_Right || keysym == XK_d)
+	{
 		data->x += 10;
+		my_mlx_pixel_put(data, data->x, data->y, GREEN_PIXEL);
+		write(1, "d\n", 2);
+	}
 	return (0);
 }
+
+
+// MOUSE COMMANDS

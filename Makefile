@@ -10,7 +10,8 @@ LIBFT = includes/libft/libft.a
 PRINTF = includes/ft_printf/libftprintf.a
 
 #
-SRC = main.c sources/formats.c sources/colors.c sources/commands.c
+SRC =	main.c sources/formats.c sources/colors.c sources/commands.c \
+		sources/checkers.c sources/errors.c
 #
 
 # Commands
@@ -31,7 +32,7 @@ $(PRINTF):
 $(MLX):
 			make --silent -C mlx
 
-$(NAME) : $(OBJ) $(LIBFT) $(PRINTF) $(MLX)
+$(NAME) : $(OBJ) $(PRINTF) $(LIBFT) $(MLX)
 	@$(CC) $(CFLAGS) $(MLXFLAGS) -o $(NAME) $(OBJ) $(LIBFT) $(PRINTF) $(MLX) $(MLXFLAGS)
 
 clean:

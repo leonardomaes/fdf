@@ -49,6 +49,19 @@ typedef struct	s_data {
 	//draw
 	int		x;
 	int		y;
+
+	//mouse
+	int		mouse_x;
+	int		mouse_y;
+
+	//numbers
+	int		num_x;
+	int		num_y;
+
+	//file
+	int		fd;
+	int		rows;
+	char	*line[];
 }				t_data;
 
 
@@ -65,15 +78,22 @@ typedef struct	s_data {
 # define D		100
 
 // FORMATS
-void    print_square(t_data *data, int x, int y);
-void    print_triangle(t_data *data, int x, int y);
-void    print_hexagon(t_data *data, int x, int y);
-void    print_line(t_data *data);
-void    draw_screen(t_data *data);
+void	print_square(t_data *data, int x, int y);
+void	print_triangle(t_data *data, int x, int y);
+void	print_hexagon(t_data *data, int x, int y);
+void	print_line(t_data *data);
+void	draw_screen(t_data *data);
+void	print_fdf(t_data *data);
 // COMMANDS
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int		handle_keypress(int keysym, t_data *win);
 int		render(t_data *data);
 int		draw_keypress(int keysym, t_data *data);
 int		check_key(int keycode, t_data *data);
+// CHECKERS
+int		file_check(t_data *img);
+int		row_check(t_data *img);
+//	ERRORS
+void file_error(int flag);
+
 #endif
