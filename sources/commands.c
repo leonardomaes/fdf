@@ -34,7 +34,8 @@ int	check_key(int keysym, t_data *data)
 	{
 		mlx_destroy_window(data->mlx, data->win);
 		data->win = NULL;
-		write(1, "Closed\n", 7);
+		write(1, "\nClosed\n", 8);
+		exit (1);
 	}
 	else if (keysym == XK_Up || keysym == XK_w)
 	{

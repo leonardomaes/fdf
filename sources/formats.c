@@ -119,17 +119,36 @@ void    draw_screen(t_data *data)
 void    print_fdf(t_data *img)
 {
     int     i;
-    int     x;
-    int     y;
+    int     j;
+    double     x;
+    double     y;
+    double     pos_x;
+    double     pos_y;
 
-    i = 0;
-    if (number_check(&img) == 0)
-		exit(1);
-    while (img->line[i])
+    j = 0;
+
+    // AQUI
+    pos_y = (WINDOW_HEIGHT / (img->rows)) - ((img->y / img->rows) / 2);
+    y = pos_y;
+	ft_printf("\n%i", img->col);
+    ft_printf("\n%i", img->rows);
+    while (j < img->rows)
     {
-        x = WINDOW_WIDTH / ft_strlen(img->line[i]);
-        y = WINDOW_HEIGHT / (img->rows - i);
-        my_mlx_pixel_put(img, x, y, GREEN_PIXEL);
-        i++;
+        i = 0;
+        pos_x = (WINDOW_WIDTH / (img->col)) - ((img->x / img->col) / 2);
+        x = pos_x;
+        while (i < img->col)
+        {
+            my_mlx_pixel_put(img, x, y, WHITE_PIXEL);
+            x += ((/* img->x * img->zoom */) / img->col); // Alterar o resultado comentado na linha 130
+
+            i++;
+        }
+        y += ((/* img->y * img->zoom */) / img->rows);   // Alterar o resultado comentado na linha 130
+
+        j++;
     }
 }
+
+    //img->x = scale_x(pos_x, img->zoom);
+    //y = scale_y(pos_y, img->zoom, img->y);

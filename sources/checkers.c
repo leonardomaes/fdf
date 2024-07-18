@@ -14,17 +14,15 @@
 
 int	file_check(t_data *img)
 {
-	int	rows;
 	int	i;
 
-	rows = 0;
 	i = 0;
 	img->line[i] = get_next_line(img->fd);
 	while (img->line[i])
 	{
 		ft_printf("%s", img->line[i]);		// APAGAR
 		img->line[++i] = get_next_line(img->fd);
-		rows++;
+		img->rows++;
 		if (img->line[i] && ft_strlen(img->line[i]) != ft_strlen(img->line[i
 					- 1]))
 		{
@@ -33,13 +31,21 @@ int	file_check(t_data *img)
 		}
 	}
 	close(img->fd);
-	img->rows = rows;
 	return (1);
 }
 
 int	number_check(t_data *img)	// Continua daqui
 {
 	int		i;
-	i = 0;
 	
+	i = 0;
+	while (img->line[0][i])
+	{
+		if (ft_isdigit(img->line[0][i]))
+			img->col++;
+		if (ft_isalpha(img->line[0][i]))
+			return (0);
+		i++;
+	}
+	return (1);
 }

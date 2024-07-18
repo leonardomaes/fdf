@@ -41,6 +41,7 @@ int main(void)
     t_data img;
 	char	*filename = "42.fdf";
 	
+	var_init(&img);
 	img.fd = open(filename, O_RDONLY);
 	if (img.fd < 0)
 	{
@@ -49,12 +50,11 @@ int main(void)
 	}
 	if (file_check(&img) == 0)
 		exit(1);
-	ft_printf("%i\n", img.rows); 		// APAGAR
 	if(init_win(&img) == 0)
 		return (0);
+	if (number_check(&img) == 0)
+        exit(1);
 	print_fdf(&img);
-
-
 
 
 
@@ -67,16 +67,11 @@ int main(void)
 	//print_line(&img);
 	//draw_screen(&img);
 
-	mlx_put_image_to_window(img.mlx, img.win, img.img, 0, 0);
-	
-	//mlx_key_hook(img.win, handle_keypress, &img);
-	//mlx_key_hook(img.win, check_key, &img);
-	//						OU
-    //mlx_loop_hook(img.win, &render, &img);
-    mlx_hook(img.win, KeyPress, KeyPressMask, &check_key, &img);
-	
-	mlx_loop(img.mlx);
 
+
+	mlx_put_image_to_window(img.mlx, img.win, img.img, 0, 0);
+    mlx_hook(img.win, KeyPress, KeyPressMask, &check_key, &img);
+	mlx_loop(img.mlx);
     mlx_destroy_display(img.mlx);
     free(img.mlx);
 

@@ -11,7 +11,8 @@ PRINTF = includes/ft_printf/libftprintf.a
 
 #
 SRC =	main.c sources/formats.c sources/colors.c sources/commands.c \
-		sources/checkers.c sources/errors.c
+		sources/checkers.c sources/errors.c sources/utils.c \
+		
 #
 
 # Commands
