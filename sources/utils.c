@@ -16,39 +16,26 @@ void	var_init(t_data *img)
 {
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 1.5;
-	img->y = WINDOW_HEIGHT;
-	img->x = WINDOW_WIDTH;
+	img->zoom = 0.65;
+	img->x = WINDOW_WIDTH * img->zoom;
+	img->y = WINDOW_HEIGHT * img->zoom;
 }
 
-double	scale(double num, double n_mi, double n_ma, double o_mi)
+int	kill_all(t_data *data)
 {
-	double	scaled_number;
-
-	scaled_number = (n_ma - n_mi) * (num - o_mi) / (WINDOW_HEIGHT - o_mi) + n_mi;
-	return (scaled_number);
+	clear_all(data);
+	write(1, "\nClosed\n", 8);
+	exit (1);
+	return (0);
 }
 
-double	scale_x(double x_pos, double scal)
+void	clear_all(t_data *data)
 {
-	double	x_scaled;
-/* 	double	x_final; */
-
-	x_scaled = ((WINDOW_WIDTH / x_pos) * 100) / (scal * 10);
-	return (x_scaled);
-
-/* 	x_scaled = x_pos * scal;
-	x_final = (x_scaled - width * (scal - 1) / 2);
-	return (x_final); */
+	if (!data)
+		return ;
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
+	if (data->mlx)
+		mlx_destroy_display(data->mlx);
+	free(data->mlx);
 }
-
-double	scale_y(double y_pos, double scal, double heigth)
-{
-	double	y_scaled;
-	double	y_final;
-
-	y_scaled = y_pos * scal;
-	y_final = (y_scaled - heigth * (scal - 1) / 2);
-	return (y_final);
-}
-

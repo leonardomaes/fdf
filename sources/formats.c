@@ -12,7 +12,7 @@
 
 #include <X11/X.h>
 #include "../fdf.h"
-
+#include "stdio.h"
 void    print_square(t_data *data, int x, int y)
 {
     int lenght, height;
@@ -111,7 +111,7 @@ void    print_line(t_data *data)
     }
 }
 
-void    draw_screen(t_data *data)
+void    draw_between(t_data *data)
 {
 	my_mlx_pixel_put(data, data->x, data->y, GREEN_PIXEL);
 }
@@ -126,29 +126,22 @@ void    print_fdf(t_data *img)
     double     pos_y;
 
     j = 0;
-
-    // AQUI
-    pos_y = (WINDOW_HEIGHT / (img->rows)) - ((img->y / img->rows) / 2);
+    pos_y = MIDDLE_HEIGHT - (((MIDDLE_HEIGHT / (img->rows / 2)) * img->zoom) * (img->rows / 2));
+    pos_x = MIDDLE_WIDTH - (((MIDDLE_WIDTH / (img->col / 2)) * img->zoom) * (img->col / 2));
     y = pos_y;
-	ft_printf("\n%i", img->col);
-    ft_printf("\n%i", img->rows);
+    printf("y1= %f\n", img->rows);
+    printf("y1= %f\n", img->col);
     while (j < img->rows)
     {
         i = 0;
-        pos_x = (WINDOW_WIDTH / (img->col)) - ((img->x / img->col) / 2);
         x = pos_x;
         while (i < img->col)
         {
-            my_mlx_pixel_put(img, x, y, WHITE_PIXEL);
-            x += ((/* img->x * img->zoom */) / img->col); // Alterar o resultado comentado na linha 130
-
+            my_mlx_pixel_put(img, x, y, WHITE_PIXEL);   
+            x += (img->x / img->col);
             i++;
         }
-        y += ((/* img->y * img->zoom */) / img->rows);   // Alterar o resultado comentado na linha 130
-
+        y += (img->y / img->rows);
         j++;
     }
 }
-
-    //img->x = scale_x(pos_x, img->zoom);
-    //y = scale_y(pos_y, img->zoom, img->y);

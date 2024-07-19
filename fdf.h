@@ -53,39 +53,46 @@ typedef struct	s_data {
 
 	//file
 	int		fd;
-	int		rows;
-	int		col;
+	double		rows;
+	double		col;
 	char	*line[];
 }				t_data;
 
+/***********************************************/
+/*					Defines					   */
+/***********************************************/
 
-# define WINDOW_WIDTH 960
-# define WINDOW_HEIGHT 540
-# define SCALE 1
+// WINDOW SETTINGS
+# define WINDOW_WIDTH 900
+# define WINDOW_HEIGHT 600
+# define MIDDLE_WIDTH WINDOW_WIDTH/2
+# define MIDDLE_HEIGHT WINDOW_HEIGHT/2
 # define MLX_ERROR 1
+// COLORS
 # define RED_PIXEL 0xFF000000
 # define GREEN_PIXEL 0x0000FF00
 # define BLUE_PIXEL 0x00FF0000
 # define WHITE_PIXEL 0xFFFFFFFF
+// KEYBOARD
 # define ESC	65307
 # define W		119
 # define A		97
 # define S		115
 # define D		100
 
+/***********************************************/
+/*				Declarations				   */
+/***********************************************/
 // FORMATS
 void	print_square(t_data *data, int x, int y);
 void	print_triangle(t_data *data, int x, int y);
 void	print_hexagon(t_data *data, int x, int y);
 void	print_line(t_data *data);
-void	draw_screen(t_data *data);
+void	draw_between(t_data *data);
 void	print_fdf(t_data *data);
 
 // COMMANDS
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int		handle_keypress(int keysym, t_data *win);
-int		render(t_data *data);
-int		draw_keypress(int keysym, t_data *data);
 int		check_key(int keycode, t_data *data);
 
 // CHECKERS
@@ -97,8 +104,8 @@ void file_error(int flag);
 
 // UTILS
 void	var_init(t_data *wininfo);
-double	scale(double num, double n_mi, double n_ma, double o_mi);
-double	scale_x(double x_pos, double scal);
-double	scale_y(double y_pos, double scal, double heigth);
+int		kill_all(t_data *data);
+void	clear_all(t_data *data);
+
 
 #endif
