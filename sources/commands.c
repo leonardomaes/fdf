@@ -33,3 +33,16 @@ int	check_key(int keysym, t_data *data)
 }
 
 // MOUSE COMMANDS
+int	check_scroll(int keysym, t_data *data)
+{
+	if (keysym == 5)
+	{
+		data->zoom -= 0.03;
+	}
+	else if (keysym == 4)
+	{
+		data->zoom += 0.03;
+	}
+	
+	return (0);
+}

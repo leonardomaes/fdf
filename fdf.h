@@ -49,6 +49,8 @@ typedef struct	s_data {
 	//draw
 	double	x;
 	double	y;
+	double	pos_x;
+	double	pos_y;
 	double	zoom;
 
 	//file
@@ -94,6 +96,7 @@ void	print_fdf(t_data *data);
 // COMMANDS
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int		check_key(int keycode, t_data *data);
+int	check_scroll(int keysym, t_data *data);
 
 // CHECKERS
 int		file_check(t_data *img);
@@ -103,7 +106,7 @@ int		number_check(t_data *img);
 void file_error(int flag);
 
 // UTILS
-void	var_init(t_data *wininfo);
+void	var_init(t_data *img, char *filename);
 int		kill_all(t_data *data);
 void	clear_all(t_data *data);
 

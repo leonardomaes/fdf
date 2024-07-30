@@ -12,13 +12,21 @@
 
 #include "../fdf.h"
 
-void	var_init(t_data *img)
+void	var_init(t_data *img, char *filename)
 {
+	img->fd = open(filename, O_RDONLY);
+	if (img->fd < 0)
+	{
+		file_error(1);
+		return ;
+	}
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 0.65;
+	img->zoom = 0.6;
 	img->x = WINDOW_WIDTH * img->zoom;
 	img->y = WINDOW_HEIGHT * img->zoom;
+	img->pos_x = 0.0;
+	img->pos_y = 0.0;
 }
 
 int	kill_all(t_data *data)

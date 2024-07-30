@@ -37,6 +37,7 @@ void	setup_hook(t_data *img)
 {
 	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
 	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
+	//mlx_mouse_hook(img->win, &check_scroll, img);		// Continua daqui
 	mlx_loop(img->mlx);
 }
 
@@ -45,13 +46,9 @@ int main(void)
     t_data img;
 	char	*filename = "42.fdf";
 	
-	var_init(&img);
-	img.fd = open(filename, O_RDONLY);
-	if (img.fd < 0)
-	{
-		file_error(1);
-		return (0);
-	}
+	var_init(&img, filename);
+
+
 	if (file_check(&img) == 0)
 		exit(1);
 	if(init_win(&img) == 0)
