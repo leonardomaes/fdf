@@ -53,12 +53,17 @@ typedef struct	s_data {
 	double	pos_y;
 	double	zoom;
 
+	//floats
+	double **points;
+
 	//file
 	int		fd;
 	double		rows;
 	double		col;
 	char	*line[];
 }				t_data;
+
+
 
 /***********************************************/
 /*					Defines					   */
@@ -100,7 +105,7 @@ int	check_scroll(int keysym, t_data *data);
 
 // CHECKERS
 int		file_check(t_data *img);
-int		number_check(t_data *img);
+int	number_check(t_data *img);
 
 //	ERRORS
 void file_error(int flag);
@@ -109,6 +114,7 @@ void file_error(int flag);
 void	var_init(t_data *img, char *filename);
 int		kill_all(t_data *data);
 void	clear_all(t_data *data);
+double	**alloc_points(t_data *img);
 
 
 #endif

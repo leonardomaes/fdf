@@ -47,3 +47,29 @@ void	clear_all(t_data *data)
 		mlx_destroy_display(data->mlx);
 	free(data->mlx);
 }
+
+double	**alloc_points(t_data *img)
+{
+	int i;
+	double **points;
+	i = 0;
+
+	points = (double **)malloc(img->rows * sizeof(double *));
+	if (points == NULL)
+		return (0);
+
+	i = 0;
+	while (i < img->rows)
+	{
+		points[i] = (double *)malloc(img->col * sizeof(double));
+		if (points[i] == NULL)
+		{
+			while (--i >= 0)
+				free(points[i]);
+			free(points);
+			return (0);
+		}
+		i++;
+	}
+	return (points);
+}

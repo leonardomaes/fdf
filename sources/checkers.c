@@ -34,7 +34,7 @@ int	file_check(t_data *img)
 	return (1);
 }
 
-int	number_check(t_data *img)	// Continua daqui
+/*int	number_check(t_data *img)	// Continua daqui
 {
 	int		i;
 	
@@ -48,4 +48,52 @@ int	number_check(t_data *img)	// Continua daqui
 		i++;
 	}
 	return (1);
+}*/
+
+int	number_check(t_data *img)
+{
+	int		i;
+	int		j;
+	int		k;
+	double	**points;
+
+	i = 0;
+	while (img->line[0][i])
+	{
+		if (ft_isdigit(img->line[0][i]) && !ft_isdigit(img->line[0][i + 1]))
+			img->col++;
+		i++;
+	}
+	points = alloc_points(img);
+	i = 0;
+	while (i < img->rows)
+	{
+		j = 0;
+		k = 0;
+		while (img->line[i][j])
+		{
+			if (ft_isdigit(img->line[i][j]))
+			{
+				points[i][k] = 0;
+				while (ft_isdigit(img->line[i][j]))
+				{
+					points[i][k] = points[i][k] * 10 + (img->line[i][j] - '0');
+					j++;
+				}
+				printf("%i", (int)points[i][k]);
+				k++;
+			}
+			else
+				j++;
+		}
+		printf("\n");
+		i++;
+	}
+	// Libere a memória alocada para points antes de retornar
+	for (i = 0; i < img->rows; i++)
+		free(points[i]);
+	free(points);
+
+	return (1);
 }
+
