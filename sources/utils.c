@@ -22,9 +22,11 @@ void	var_init(t_data *img, char *filename)
 	}
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 0.6;
-	img->x = WINDOW_WIDTH * img->zoom;
-	img->y = WINDOW_HEIGHT * img->zoom;
+	img->zoom = 0.65;
+	img->width_x = WINDOW_WIDTH * img->zoom;		//Possivel correcao
+	img->height_y = WINDOW_HEIGHT * img->zoom;
+	img->last_x = 0;
+	img->last_y = 0;
 	img->pos_x = 0.0;
 	img->pos_y = 0.0;
 }

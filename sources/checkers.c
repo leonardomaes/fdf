@@ -33,24 +33,7 @@ int	file_check(t_data *img)
 	close(img->fd);
 	return (1);
 }
-
-/*int	number_check(t_data *img)	// Continua daqui
-{
-	int		i;
-	
-	i = 0;
-	while (img->line[0][i])
-	{
-		if (ft_isdigit(img->line[0][i]))
-			img->col++;
-		if (ft_isalpha(img->line[0][i]))
-			return (0);
-		i++;
-	}
-	return (1);
-}*/
-
-int	number_check(t_data *img)
+int	number_check(t_data *img)	// Caso letra, talvez tentar usando ft_split para dividir em vetores
 {
 	int		i;
 	int		j;
@@ -76,22 +59,20 @@ int	number_check(t_data *img)
 			{
 				points[i][k] = 0;
 				while (ft_isdigit(img->line[i][j]))
-				{
-					points[i][k] = points[i][k] * 10 + (img->line[i][j] - '0');
-					j++;
-				}
-				printf("%i", (int)points[i][k]);
+					points[i][k] = points[i][k] * 10 + (img->line[i][j++] - '0');
 				k++;
 			}
 			else
 				j++;
 		}
-		printf("\n");
 		i++;
 	}
-	// Libere a memória alocada para points antes de retornar
-	for (i = 0; i < img->rows; i++)
-		free(points[i]);
+	img->points = points;
+	i = 0;
+	while (i < img->rows)
+	{
+		free(points[i++]);
+	}
 	free(points);
 
 	return (1);

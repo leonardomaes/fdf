@@ -57,11 +57,7 @@ int main(void)
         exit(1);
 	print_fdf(&img);
 
-	//print_square(&img, 320, 400);
-	//print_triangle(&img, 10, 400);
-	//print_hexagon(&img, 630, 400);
-	//print_line(&img);
-	//draw_screen(&img);
+	
 	mlx_put_image_to_window(img.mlx, img.win, img.img, 0, 0);
 	setup_hook(&img);
 	clear_all(&img);

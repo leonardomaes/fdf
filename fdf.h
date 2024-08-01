@@ -40,27 +40,31 @@ typedef struct	s_data {
 	char	*addr;
 	int		bits_per_pixel;
 	int		line_length;
-	int		endian;
+	int		endian;			
 
 	//mlx
-    void	*mlx;
-    void	*win;
+    void	*mlx;			//Inicia do programa
+    void	*win;			//Inicia da tela
 
 	//draw
-	double	x;
-	double	y;
-	double	pos_x;
-	double	pos_y;
-	double	zoom;
+	double	zoom;			//Quantidade de zoom
+	double	width_x;				//Tamando da imagem proporcionalmente ao zoom
+	double	height_y;				//Tamando da imagem proporcionalmente ao zoom
+	double	pos_x;			//Pos Inicial do X baseado no tamanho da tela e do zoom
+	double	pos_y;			//Pos Inicial do Y baseado no tamanho da tela e do zoom
+	double	last_x;			//
+	double	last_y;			//
+	double	cur_x;				//
+	double	cur_y;				//
 
 	//floats
-	double **points;
+	double **points;		//Vetor com os valores da *Line[] em Double
 
 	//file
-	int		fd;
-	double		rows;
-	double		col;
-	char	*line[];
+	int			fd;			//File descriptor
+	double		rows;		//Qtd de linhas
+	double		col;		//Qtd de colunas
+	char		*line[];	//Linha obtida pelo GNL
 }				t_data;
 
 
@@ -91,11 +95,7 @@ typedef struct	s_data {
 /*				Declarations				   */
 /***********************************************/
 // FORMATS
-void	print_square(t_data *data, int x, int y);
-void	print_triangle(t_data *data, int x, int y);
-void	print_hexagon(t_data *data, int x, int y);
-void	print_line(t_data *data);
-void	draw_between(t_data *data);
+void	draw_lines(t_data *img);
 void	print_fdf(t_data *data);
 
 // COMMANDS
