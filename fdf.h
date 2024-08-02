@@ -48,14 +48,15 @@ typedef struct	s_data {
 
 	//draw
 	double	zoom;			//Quantidade de zoom
+	double	rotation;
 	double	width_x;				//Tamando da imagem proporcionalmente ao zoom
 	double	height_y;				//Tamando da imagem proporcionalmente ao zoom
 	double	pos_x;			//Pos Inicial do X baseado no tamanho da tela e do zoom
 	double	pos_y;			//Pos Inicial do Y baseado no tamanho da tela e do zoom
 	double	last_x;			//
 	double	last_y;			//
-	double	cur_x;				//
-	double	cur_y;				//
+	double	cur_x;			//
+	double	cur_y;			//
 
 	//floats
 	double **points;		//Vetor com os valores da *Line[] em Double
@@ -90,6 +91,13 @@ typedef struct	s_data {
 # define A		97
 # define S		115
 # define D		100
+# define ARROW_UP 126
+# define ARROW_DOWN 125
+# define MOUSE_CLICK_LEFT 1
+# define MOUSE_CLICK_RIGHT 2
+# define MOUSE_CLICK_MIDDLE 3
+# define MOUSE_WHEEL_UP 4
+# define MOUSE_WHEEL_DOWN 5
 
 /***********************************************/
 /*				Declarations				   */
@@ -100,8 +108,8 @@ void	print_fdf(t_data *data);
 
 // COMMANDS
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int		check_key(int keycode, t_data *data);
-int	check_scroll(int keysym, t_data *data);
+int		check_key(int keycode, t_data *img);
+int		mouse_hook(int keysym, t_data *img);
 
 // CHECKERS
 int		file_check(t_data *img);

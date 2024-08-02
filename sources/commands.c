@@ -21,28 +21,27 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 }
 
 // KEYBOARD COMMANDS
-int	check_key(int keysym, t_data *data)
+int	check_key(int keysym, t_data *img)
 {
 	if (keysym == ESC)
 	{
-		kill_all(data);
+		kill_all(img);
 		write(1, "\nClosed\n", 8);
 		exit (1);
 	}
+	else if (keysym == ARROW_UP)
+		img->zoom *= 1.05;
+	else if (keysym == ARROW_DOWN)
+		img->zoom *= 0.95;
 	return (0);
 }
 
 // MOUSE COMMANDS
-int	check_scroll(int keysym, t_data *data)
+int	mouse_hook(int keysym, t_data *img)
 {
-	if (keysym == 5)
-	{
-		data->zoom -= 0.03;
-	}
-	else if (keysym == 4)
-	{
-		data->zoom += 0.03;
-	}
-	
+	if (keysym == 4)
+		img->zoom *= 0.95;
+	else if (keysym == 5)
+		img->zoom *= 1.05;
 	return (0);
 }

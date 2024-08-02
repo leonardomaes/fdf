@@ -37,7 +37,7 @@ void	setup_hook(t_data *img)
 {
 	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
 	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
-	//mlx_mouse_hook(img->win, &check_scroll, img);		// Continua daqui
+	mlx_mouse_hook(img->win, mouse_hook, img);		// Continua daqui
 	mlx_loop(img->mlx);
 }
 
@@ -47,19 +47,23 @@ int main(void)
 	char	*filename = "42.fdf";
 	
 	var_init(&img, filename);
-
-
 	if (file_check(&img) == 0)
 		exit(1);
 	if(init_win(&img) == 0)
-		return (0);
+		exit (1);
 	if (number_check(&img) == 0)
         exit(1);
 	print_fdf(&img);
 
-	
-	mlx_put_image_to_window(img.mlx, img.win, img.img, 0, 0);
 	setup_hook(&img);
 	clear_all(&img);
 	return (0);
 }
+
+
+/*
+Cores
+3D
+rotação
+Var pointers
+*/
