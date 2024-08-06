@@ -29,19 +29,15 @@ int	check_key(int keysym, t_data *img)
 		write(1, "\nClosed\n", 8);
 		exit (1);
 	}
-	else if (keysym == ARROW_UP)
-		img->zoom *= 1.05;
-	else if (keysym == ARROW_DOWN)
-		img->zoom *= 0.95;
 	return (0);
 }
 
 // MOUSE COMMANDS
-int	mouse_hook(int keysym, t_data *img)
+int	mouse_hook(int keysym, t_data *img)		//BONUS
 {
-	if (keysym == 4)
-		img->zoom *= 0.95;
-	else if (keysym == 5)
-		img->zoom *= 1.05;
+	if (keysym == 4 && img->zoom < 1.0)	// Zoom in
+		img->zoom += img->zoom/10;
+	else if (keysym == 5)	//zoom out
+		img->zoom -= img->zoom/10;
 	return (0);
 }

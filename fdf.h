@@ -81,10 +81,10 @@ typedef struct	s_data {
 # define MIDDLE_HEIGHT WINDOW_HEIGHT/2
 # define MLX_ERROR 1
 // COLORS
-# define RED_PIXEL 0xFF000000
-# define GREEN_PIXEL 0x0000FF00
-# define BLUE_PIXEL 0x00FF0000
-# define WHITE_PIXEL 0xFFFFFFFF
+# define RED_PIXEL 0xFF0000
+# define BLUE_PIXEL 0x0000FF
+# define GREEN_PIXEL 0x00FF00
+# define WHITE_PIXEL 0xFFFFFF
 // KEYBOARD
 # define ESC	65307
 # define W		119

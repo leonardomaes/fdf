@@ -13,7 +13,7 @@
 #include <X11/X.h>
 #include "../fdf.h"
 
-void    draw_lines(t_data *img)
+void    draw_lines(t_data *img)	
 {
 	double	x;
 	double	y;
@@ -38,10 +38,10 @@ void    print_fdf(t_data *img)
 	int			j;
 
 	j = 0;
-	img->pos_y = MIDDLE_HEIGHT - (((MIDDLE_HEIGHT / (img->rows / 2)) * img->zoom) * (img->rows / 2));
-	img->pos_x = MIDDLE_WIDTH - (((MIDDLE_WIDTH / (img->col / 2)) * img->zoom) * (img->col / 2));
+	img->pos_y = MIDDLE_HEIGHT - (WINDOW_HEIGHT * img->zoom / 2) + (WINDOW_HEIGHT * img->zoom / (2 * img->rows));
+	img->pos_x = MIDDLE_WIDTH - (WINDOW_WIDTH * img->zoom / 2) + (WINDOW_WIDTH * img->zoom / (2 * img->col));
 	img->cur_y = img->pos_y;
-	while (j < img->rows)
+	while (j < img->rows)	
 	{
 		i = 0;
 		img->cur_x = img->pos_x;
@@ -55,19 +55,19 @@ void    print_fdf(t_data *img)
 				img->cur_x += (img->width_x / img->col);
 			if (img->last_x != 0 && img->last_y != 0)
 				draw_lines(img);
-			my_mlx_pixel_put(img, img->pos_x-2, img->pos_y-2, GREEN_PIXEL);
-			my_mlx_pixel_put(img, img->last_x-2, img->last_y-2, BLUE_PIXEL);	//Apagar depois de finalizado
+			my_mlx_pixel_put(img, img->last_x+2, 36, RED_PIXEL);	//Apagar depois de finalizado
 			i++;
 		}
 		j++;
 	}
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
-	printf("pos_y= %f\n", img->pos_y);		//Apagar
-	printf("pos_x= %f\n", img->pos_x);		//Apagar
-	printf("y1= %f\n", img->rows);			//Apagar
-	printf("y1= %f\n", img->col);			//Apagar
+	printf("pos_y= %f\n", img->pos_y);				//Apagar
+	printf("pos_x= %f\n", img->pos_x);				//Apagar
+	printf("rows= %f\n", img->rows);					//Apagar
+	printf("cols= %f\n", img->col);					//Apagar
 	printf("pos_final_y= %f\n", img->cur_y);		//Apagar
 	printf("pos_final_x= %f\n", img->cur_x);		//Apagar
 	printf("height_y= %f\n", img->height_y);		//Apagar
 	printf("width_x= %f\n", img->width_x);			//Apagar
+	printf("zoom= %f\n", img->zoom);			//Apagar
 }

@@ -36,8 +36,8 @@ int	init_win(t_data *img)
 void	setup_hook(t_data *img)
 {
 	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
-	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
 	mlx_mouse_hook(img->win, mouse_hook, img);		// Continua daqui
+	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
 	mlx_loop(img->mlx);
 }
 
