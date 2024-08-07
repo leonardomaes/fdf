@@ -63,11 +63,11 @@ void    print_fdf(t_data *img)
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
 	printf("pos_y= %f\n", img->pos_y);				//Apagar
 	printf("pos_x= %f\n", img->pos_x);				//Apagar
-	printf("rows= %f\n", img->rows);					//Apagar
+	printf("rows= %f\n", img->rows);				//Apagar
 	printf("cols= %f\n", img->col);					//Apagar
 	printf("pos_final_y= %f\n", img->cur_y);		//Apagar
 	printf("pos_final_x= %f\n", img->cur_x);		//Apagar
 	printf("height_y= %f\n", img->height_y);		//Apagar
 	printf("width_x= %f\n", img->width_x);			//Apagar
-	printf("zoom= %f\n", img->zoom);			//Apagar
+	printf("zoom= %f\n", img->zoom);				//Apagar
 }

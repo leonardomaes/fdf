@@ -44,7 +44,7 @@ void	setup_hook(t_data *img)
 int main(void)
 {
     t_data img;
-	char	*filename = "42.fdf";
+	char	*filename = "test_maps/42.fdf";
 	
 	var_init(&img, filename);
 	if (file_check(&img) == 0)
@@ -53,17 +53,18 @@ int main(void)
 		exit (1);
 	if (number_check(&img) == 0)
         exit(1);
-	print_fdf(&img);
 
+	for (size_t i = 0; i < img.rows; i++)	//Apagar
+	{
+		for (size_t j = 0; j < img.col; j++)
+		{
+			printf("%i ", (int)img.points[i][j]);
+		}
+		printf("\n");
+		
+	}
+	print_fdf(&img);
 	setup_hook(&img);
 	clear_all(&img);
 	return (0);
 }
-
-
-/*
-Cores
-3D
-rotação
-Var pointers
-*/

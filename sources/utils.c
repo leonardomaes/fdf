@@ -22,7 +22,7 @@ void	var_init(t_data *img, char *filename)
 	}
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 1;
+	img->zoom = 0.80;
 	img->rotation = 0;
 	img->width_x = WINDOW_WIDTH * img->zoom;		//Possivel correcao
 	img->height_y = WINDOW_HEIGHT * img->zoom;
@@ -42,12 +42,21 @@ int	kill_all(t_data *data)
 
 void	clear_all(t_data *data)
 {
+	int i;
+	
+	i = 0;
 	if (!data)
 		return ;
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
 	if (data->mlx)
 		mlx_destroy_display(data->mlx);
+	
+	while (i < data->rows)
+	{
+		free(data->points[i++]);
+	}
+	free(data->points);
 	free(data->mlx);
 }
 

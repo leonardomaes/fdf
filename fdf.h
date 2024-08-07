@@ -75,8 +75,8 @@ typedef struct	s_data {
 /***********************************************/
 
 // WINDOW SETTINGS
-# define WINDOW_WIDTH 900
-# define WINDOW_HEIGHT 600
+# define WINDOW_WIDTH 1280
+# define WINDOW_HEIGHT 720
 # define MIDDLE_WIDTH WINDOW_WIDTH/2
 # define MIDDLE_HEIGHT WINDOW_HEIGHT/2
 # define MLX_ERROR 1
