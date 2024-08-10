@@ -23,8 +23,9 @@
 # include "mlx/mlx.h"
 # include "mlx/mlx_int.h"
 # include <X11/X.h>
-#include <X11/keysym.h>
+# include <X11/keysym.h>
 
+# include <math.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
@@ -81,6 +82,7 @@ typedef struct	s_data {
 # define MIDDLE_HEIGHT WINDOW_HEIGHT/2
 # define MLX_ERROR 1
 // COLORS
+# define PI 3.14159265
 # define RED_PIXEL 0xFF0000
 # define BLUE_PIXEL 0x0000FF
 # define GREEN_PIXEL 0x00FF00
@@ -99,11 +101,12 @@ typedef struct	s_data {
 # define MOUSE_WHEEL_UP 4
 # define MOUSE_WHEEL_DOWN 5
 
+
 /***********************************************/
 /*				Declarations				   */
 /***********************************************/
 // FORMATS
-void	draw_lines(t_data *img);
+void    draw_lines(t_data *img);
 void	print_fdf(t_data *data);
 
 // COMMANDS
@@ -124,5 +127,8 @@ int		kill_all(t_data *data);
 void	clear_all(t_data *data);
 double	**alloc_points(t_data *img);
 
+//	MATH
+void    isometric(double *x, double *y, double z);
+double	ft_abs(float n);
 
 #endif

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "x.h": "c",
-        "fdf.h": "c"
+        "fdf.h": "c",
+        "cmath": "c"
     }
 }

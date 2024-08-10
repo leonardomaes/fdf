@@ -17,17 +17,26 @@ void    draw_lines(t_data *img)
 {
 	double	x;
 	double	y;
-	
+	double	z;
+	double	x1;
+	double	y1;
+
 	y = img->last_y;
 	while (y <= img->cur_y)
 	{
+		y1 = y;
 		x = img->last_x;
 		while (x <= img->cur_x)
 		{
-			my_mlx_pixel_put(img, x, img->last_y, WHITE_PIXEL);
+			x1 = x;
+			z = 0;
+			printf("a\n");
+			isometric(&x1, &y1, z);
+			my_mlx_pixel_put(img, x1, img->last_y, WHITE_PIXEL);
 			x++;
 		}
-		my_mlx_pixel_put(img, img->last_x, y, WHITE_PIXEL);
+		isometric(&x1, &y1, z);
+		my_mlx_pixel_put(img, img->last_x, y1, WHITE_PIXEL);
 		y++;
 	}
 }
@@ -37,7 +46,9 @@ void    print_fdf(t_data *img)
 	int			i;
 	int			j;
 
+	ft_bzero(img->addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->bits_per_pixel / 8));
 	j = 0;
+	i = 0;
 	img->pos_y = MIDDLE_HEIGHT - (WINDOW_HEIGHT * img->zoom / 2) + (WINDOW_HEIGHT * img->zoom / (2 * img->rows));
 	img->pos_x = MIDDLE_WIDTH - (WINDOW_WIDTH * img->zoom / 2) + (WINDOW_WIDTH * img->zoom / (2 * img->col));
 	img->cur_y = img->pos_y;
@@ -53,14 +64,23 @@ void    print_fdf(t_data *img)
 			img->last_x = img->cur_x;
 			if (i < img->col - 1)
 				img->cur_x += (img->width_x / img->col);
+			
 			if (img->last_x != 0 && img->last_y != 0)
+			{
+				printf("\n48\n");
+				isometric(&(img->last_x), &(img->last_y), 0);
+				isometric(&(img->cur_x), &(img->cur_y), 0);
 				draw_lines(img);
+			}
 			my_mlx_pixel_put(img, img->last_x+2, 36, RED_PIXEL);	//Apagar depois de finalizado
 			i++;
 		}
 		j++;
 	}
 	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
+
+
+
 	printf("pos_y= %f\n", img->pos_y);				//Apagar
 	printf("pos_x= %f\n", img->pos_x);				//Apagar
 	printf("rows= %f\n", img->rows);				//Apagar
