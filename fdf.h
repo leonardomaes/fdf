@@ -58,6 +58,7 @@ typedef struct	s_data {
 	double	last_y;			//
 	double	cur_x;			//
 	double	cur_y;			//
+	double	cur_z;
 
 	//floats
 	double **points;		//Vetor com os valores da *Line[] em Double

@@ -17,6 +17,11 @@ void    isometric(double *x, double *y, double z)
     double previous_x;
     double previous_y;
 
+    if (x == NULL || y == NULL)
+    {
+        printf("Erro no isometric");
+        exit(1);
+    }
     previous_x = *x;
     previous_y = *y;
     *x = (previous_x - previous_y) * cos(0.523599);
