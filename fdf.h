@@ -56,9 +56,10 @@ typedef struct	s_data {
 	double	pos_y;			//Pos Inicial do Y baseado no tamanho da tela e do zoom
 	double	last_x;			//
 	double	last_y;			//
+	double	last_z;			//
 	double	cur_x;			//
 	double	cur_y;			//
-	double	cur_z;
+	double	cur_z;			//
 
 	//floats
 	double **points;		//Vetor com os valores da *Line[] em Double
@@ -77,8 +78,8 @@ typedef struct	s_data {
 /***********************************************/
 
 // WINDOW SETTINGS
-# define WINDOW_WIDTH 1280
-# define WINDOW_HEIGHT 720
+# define WINDOW_WIDTH 900
+# define WINDOW_HEIGHT 600
 # define MIDDLE_WIDTH WINDOW_WIDTH/2
 # define MIDDLE_HEIGHT WINDOW_HEIGHT/2
 # define MLX_ERROR 1
@@ -107,7 +108,7 @@ typedef struct	s_data {
 /*				Declarations				   */
 /***********************************************/
 // FORMATS
-void    draw_lines(t_data *img);
+void    draw_line(t_data *img);
 void	print_fdf(t_data *data);
 
 // COMMANDS

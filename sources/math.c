@@ -19,7 +19,7 @@ void    isometric(double *x, double *y, double z)
 
     if (x == NULL || y == NULL)
     {
-        printf("Erro no isometric");
+        printf("Erro with isometric function");
         exit(1);
     }
     previous_x = *x;
