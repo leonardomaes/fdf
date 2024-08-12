@@ -71,6 +71,17 @@ typedef struct	s_data {
 	char		*line[];	//Linha obtida pelo GNL
 }				t_data;
 
+typedef struct s_draw
+{
+	double	dx;
+	double	dy;
+	double	d1;
+	double	d2;
+	double	x;
+	double	y;
+	double	sx;
+	double	sy;
+}				t_draw;
 
 
 /***********************************************/

@@ -15,44 +15,49 @@
 
 void    draw_line(t_data *img)
 {
-	double dx = fabs(img->cur_x - img->last_x);
-	double dy = fabs(img->cur_y - img->last_y);
-	double sx = (img->last_x < img->cur_x) ? 1 : -1;
-	double sy = (img->last_y < img->cur_y) ? 1 : -1;
-	double err = dx - dy;
+	t_draw draw;
 
-	while (img->last_x <= img->cur_x && img->last_y <= img->cur_y)
+	draw.dx = fabs(img->cur_x - img->last_x);
+	draw.dy = fabs(img->cur_y - img->last_y);
+	draw.sx = (img->last_x < img->cur_x) ? 1 : -1;
+	draw.sy = (img->last_y < img->cur_y) ? 1 : -1;
+	draw.d1 = (draw.dx - draw.dy);
+	draw.x = img->last_x;
+	draw.y = img->last_y;
+	while (draw.x < img->cur_x)
 	{
-		my_mlx_pixel_put(img, img->last_x, img->last_y, WHITE_PIXEL);
-		double e2 = 2 * err;
-		if (e2 > -dy)
+		my_mlx_pixel_put(img, draw.x, draw.y, WHITE_PIXEL);
+		draw.d2 = 2 * draw.d1;
+		if (draw.d2 > -draw.dy)
 		{
-			err -= dy;
-			img->last_x += sx;
+			draw.d1 -= draw.dy;
+			draw.x+= draw.sx;
 		}
-		if (e2 < dx)
+		if(draw.d2 < draw.dx)
 		{
-			err += dx;
-			img->last_y += sy;
+			draw.d1 += draw.dx;
+			draw.y+= draw.sy;
 		}
 	}
 }
 
-void    print_fdf(t_data *img)
+void	print_fdf(t_data *img)
 {
-	int			i;
-	int			j;
+	int	i;
+	int	j;
 
 
 	ft_bzero(img->addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->bits_per_pixel / 8));
 	j = 0;
 	i = 0;
-	img->pos_y = MIDDLE_HEIGHT - (WINDOW_HEIGHT * img->zoom / 2) + (WINDOW_HEIGHT * img->zoom / (2 * img->rows));
-	img->pos_x = MIDDLE_WIDTH - (WINDOW_WIDTH * img->zoom / 2) + (WINDOW_WIDTH * img->zoom / (2 * img->col));
+	//img->pos_y = MIDDLE_HEIGHT - (WINDOW_HEIGHT * img->zoom / 2) + (WINDOW_HEIGHT * img->zoom / (2 * img->rows));		//Razao de 1/10
+	//img->pos_x = MIDDLE_WIDTH - (WINDOW_WIDTH * img->zoom / 2) + (WINDOW_WIDTH * img->zoom / (2 * img->col));			//Razao de 2/5
 	//img->pos_y = WINDOW_HEIGHT / img->zoom / img->rows;
 	//img->pos_x = WINDOW_WIDTH / img->zoom / img->col;
+	img->pos_y = WINDOW_HEIGHT / 10;
+	img->pos_x = WINDOW_WIDTH / 5 * 2.5;
 	//isometric(&img->pos_x, &img->pos_y, img->points[j][i]);
-	while (j < img->rows)	
+	while (j < img->rows)
 	{
 		i = 0;
 		while (i < img->col)
@@ -70,7 +75,7 @@ void    print_fdf(t_data *img)
 				draw_line(img);
 			}
 			
-			if (j < img->rows - 1)
+/* 			if (j < img->rows - 1)
 			{
 				img->cur_x = img->last_x;
 				img->cur_y = img->pos_y + (j + 1) * (img->height_y / img->rows);
@@ -78,7 +83,7 @@ void    print_fdf(t_data *img)
 				isometric(&img->last_x, &img->last_y, img->last_z);
 				isometric(&img->cur_x, &img->cur_y, img->cur_z);
 				draw_line(img);
-			}
+			} */
 			i++;
 		}
 		j++;
@@ -94,7 +99,37 @@ void    print_fdf(t_data *img)
 	printf("width_x= %f\n", img->width_x);			//Apagar
 	printf("zoom= %f\n", img->zoom);				//Apagar
 }
+
+
+
+
 /*
+
+void    draw_line(t_data *img)
+{
+	double dx = fabs(img->cur_x - img->last_x);
+	double dy = fabs(img->cur_y - img->last_y);
+	double sx = (img->last_x < img->cur_x) ? 1 : -1;
+	double sy = (img->last_y < img->cur_y) ? 1 : -1;
+	double err = dx - dy;
+
+	while (img->last_x <= img->cur_x)
+	{
+		my_mlx_pixel_put(img, img->last_x, img->last_y, WHITE_PIXEL);
+		double e2 = 2 * err;
+		if (e2 > -dy)
+		{
+			err -= dy;
+			img->last_x += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			img->last_y += sy;
+		}
+	}
+}
+
 void    print_fdf(t_data *img)
 {
 	int			i;
@@ -157,7 +192,7 @@ void    draw_lines(t_data *img)
 		{
 			y1 = y;
 			x1 = x;
-			isometric(&x1, &y1, img->cur_z);
+			//isometric(&x1, &y1, img->cur_z);
 			my_mlx_pixel_put(img, x1, img->last_y, WHITE_PIXEL);
 			x++;
 		}
@@ -217,4 +252,5 @@ void    print_fdf(t_data *img)
 	printf("width_x= %f\n", img->width_x);			//Apagar
 	printf("zoom= %f\n", img->zoom);				//Apagar
 }
+
 */
