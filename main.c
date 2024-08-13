@@ -44,7 +44,7 @@ void	setup_hook(t_data *img)
 int main(void)
 {
     t_data img;
-	char	*filename = "test_maps/elem2.fdf";
+	char	*filename = "test_maps/leo.fdf";
 	
 	var_init(&img, filename);
 	if (file_check(&img) == 0)

@@ -119,7 +119,7 @@ typedef struct s_draw
 /*				Declarations				   */
 /***********************************************/
 // FORMATS
-void    draw_line(t_data *img);
+void    draw_line(t_data *img, int flag);
 void	print_fdf(t_data *data);
 
 // COMMANDS
