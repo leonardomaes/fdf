@@ -41,11 +41,18 @@ void	setup_hook(t_data *img)
 	mlx_loop(img->mlx);
 }
 
-int main(void)
+int main(int argv, char *argc[])
 {
     t_data img;
-	char	*filename = "test_maps/elem2.fdf";
+	char	*filename;
 	
+	if (argv == 2)
+		filename = argc[1];
+	else
+	{
+		file_error(1);
+		exit(1);
+	}
 	var_init(&img, filename);
 	if (file_check(&img) == 0)
 		exit(1);

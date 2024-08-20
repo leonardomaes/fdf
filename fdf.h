@@ -49,6 +49,7 @@ typedef struct	s_data {
 
 	//draw
 	double	zoom;			//Quantidade de zoom
+	double	zoom_max;
 	double	rotation;
 	double	width_x;				//Tamando da imagem proporcionalmente ao zoom
 	double	height_y;				//Tamando da imagem proporcionalmente ao zoom

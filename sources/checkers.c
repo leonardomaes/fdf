@@ -17,7 +17,7 @@ int	file_check(t_data *img)
 	int	i;
 
 	i = 0;
-	img->line[i] = get_next_line(img->fd);
+	img->line[i] = get_next_line(img->fd); // if can't open then file error
 	while (img->line[i])
 	{
 		ft_printf("%s", img->line[i]);		// APAGAR

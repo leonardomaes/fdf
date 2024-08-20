@@ -22,7 +22,18 @@ void	var_init(t_data *img, char *filename)
 	}
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 0.60;
+	img->zoom = 1;
+	if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.7 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.8)	// 16:9
+		img->zoom_max = 0.75;
+	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.3 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.4) // 4:3
+		img->zoom_max = 0.69;
+	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.2 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.3)
+		img->zoom_max = 0.67;
+	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT == 1.6)
+		img->zoom_max = 0.74;
+	else
+		img->zoom_max = 0.50;		// Continuar daqui, alterar de acordo com quantidade de rows e cols
+	img->zoom = img->zoom_max;
 	img->rotation = 0;
 	img->width_x = WINDOW_WIDTH * img->zoom;		//Possivel correcao
 	img->height_y = WINDOW_HEIGHT * img->zoom;

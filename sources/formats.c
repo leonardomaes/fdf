@@ -33,12 +33,12 @@ void    draw_line(t_data *img, int flag)
 			if (draw.d2 > -draw.dy)
 			{
 				draw.d1 -= draw.dy;
-				draw.x+= draw.sx;
+				draw.x += draw.sx;
 			}
 			if(draw.d2 < draw.dx)
 			{
 				draw.d1 += draw.dx;
-				draw.y+= draw.sy;
+				draw.y += draw.sy;
 			}
 		}
 	}else if (flag == 2)
@@ -50,19 +50,52 @@ void    draw_line(t_data *img, int flag)
 			if (draw.d2 > -draw.dy)
 			{
 				draw.d1 -= draw.dy;
-				draw.x+= draw.sx;
+				draw.x += draw.sx;
 			}
 			if(draw.d2 < draw.dx)
 			{
 				draw.d1 += draw.dx;
-				draw.y+= draw.sy;
+				draw.y += draw.sy;
 			}
 		}
 	}
-	my_mlx_pixel_put(img, 400, 100, RED_PIXEL); //em cima
-	my_mlx_pixel_put(img, 677, 670, RED_PIXEL); //em baixo
-	my_mlx_pixel_put(img, 45, 306, RED_PIXEL); // Esquerda
-	my_mlx_pixel_put(img, 1032, 465, RED_PIXEL); // Direita
+}
+
+void    calculate_offsets(t_data *img)
+{
+	double min_x;
+	double min_y;
+	double max_x;
+	double max_y;
+	double	x;
+	double	y;
+	int i;
+	int	j;
+
+	min_x = WINDOW_WIDTH;
+	min_y = WINDOW_HEIGHT;
+	max_x = 0;
+	max_y = 0;
+	j = 0;
+	while (j < img->rows)
+	{
+		i = 0;
+		while (i < img->col)
+		{
+			x = i * (img->width_x / img->col);
+			y = j * (img->height_y / img->rows);
+			isometric(&x, &y, img->points[j][i]);
+			if (x < min_x) min_x = x;
+			if (y < min_y) min_y = y;
+			if (x > max_x) max_x = x;
+			if (y > max_y) max_y = y;
+			i++;
+		}
+		
+		j++;
+	}
+	img->pos_x = (WINDOW_WIDTH - (max_x - min_x)) / 2 - min_x;
+	img->pos_y = (WINDOW_HEIGHT - (max_y - min_y)) / 2 - min_y;
 }
 
 void	print_fdf(t_data *img)
@@ -74,18 +107,7 @@ void	print_fdf(t_data *img)
 
 
 	ft_bzero(img->addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->bits_per_pixel / 8));
-	img->pos_y = MIDDLE_HEIGHT - (WINDOW_HEIGHT * img->zoom / 2) + (WINDOW_HEIGHT * img->zoom / (2 * img->rows));		//Razao de 1/10
-	img->pos_x = WINDOW_WIDTH / img->zoom / img->col;
-	//img->pos_x = MIDDLE_WIDTH - (WINDOW_WIDTH * img->zoom / 2) + (WINDOW_WIDTH * img->zoom / (2 * img->col));			//Razao de 2/5
-	//img->pos_y = WINDOW_HEIGHT / img->zoom / img->rows;
-	//img->pos_x = WINDOW_WIDTH / img->zoom / img->col;
-	//img->pos_y = WINDOW_HEIGHT / 100;
-	//img->pos_x = WINDOW_WIDTH / 5 * 2.5;
-	//img->pos_x = (WINDOW_WIDTH - img->width_x) / 2;
-	//img->pos_y = (WINDOW_HEIGHT - img->height_y) / 2;
-	//img->pos_x = 400;
-	//img->pos_y = 100;
-	//isometric(&img->pos_x, &img->pos_y, img->points[j][i]);
+	calculate_offsets(img);
 	j = 0;
 	while (j < img->rows)
 	{
