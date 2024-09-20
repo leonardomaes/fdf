@@ -22,25 +22,14 @@ void	var_init(t_data *img, char *filename)
 	}
 	img->col = 0;
 	img->rows = 0;
-	img->zoom = 1;
-	if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.7 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.8)	// 16:9
-		img->zoom_max = 0.75;
-	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.3 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.4) // 4:3
-		img->zoom_max = 0.69;
-	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT > 1.2 && (double)WINDOW_WIDTH / (double)WINDOW_HEIGHT < 1.3)
-		img->zoom_max = 0.67;
-	else if ((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT == 1.6)
-		img->zoom_max = 0.74;
-	else
-		img->zoom_max = 0.50;		// Continuar daqui, alterar de acordo com quantidade de rows e cols
-	img->zoom = img->zoom_max;
-	img->rotation = 0;
-	img->width_x = WINDOW_WIDTH * img->zoom;		//Possivel correcao
-	img->height_y = WINDOW_HEIGHT * img->zoom;
-	img->last_x = 0;
-	img->last_y = 0;
-	img->pos_x = 0.0;
-	img->pos_y = 0.0;
+	img->draw.zoom = 0.65;
+	img->draw.rotation = 0;
+	img->draw.width_x = WINDOW_WIDTH * img->draw.zoom;		//Possivel correcao
+	img->draw.height_y = WINDOW_HEIGHT * img->draw.zoom;
+	img->draw.last_x = 0;
+	img->draw.last_y = 0;
+	img->draw.pos_x = 0.0;
+	img->draw.pos_y = 0.0;
 }
 
 int	kill_all(t_data *data)
@@ -95,4 +84,12 @@ double	**alloc_points(t_data *img)
 		i++;
 	}
 	return (points);
+}
+
+void file_error(int flag)
+{
+    if (flag == 1)
+	    ft_printf("ERROR:\nFile doesn't exist or couldn't open!");
+    else if(flag == 2)
+        ft_printf("ERROR:\nMap in wrong format, check the edges!");
 }

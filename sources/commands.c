@@ -16,7 +16,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	dst = data->image.addr + (y * data->image.line_length + x * (data->image.bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
 
@@ -29,15 +29,5 @@ int	check_key(int keysym, t_data *img)
 		write(1, "\nClosed\n", 8);
 		exit (1);
 	}
-	return (0);
-}
-
-// MOUSE COMMANDS
-int	mouse_hook(int keysym, t_data *img)		//BONUS
-{
-	if (keysym == 4 && img->zoom < 1.0)	// Zoom in
-		img->zoom += img->zoom/10;
-	else if (keysym == 5)	//zoom out
-		img->zoom -= img->zoom/10;
 	return (0);
 }

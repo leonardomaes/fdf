@@ -27,8 +27,8 @@ int	file_check(t_data *img)
 					- 1]))
 		{
 			file_error(2);
-			return (0);
-		} */
+			return (0); 
+		} */		// Verifica se as linhas tem o mesmo - Talvez alterar para contar os cols
 	}
 	i = 0;
 	while (img->line[0][i])
@@ -56,7 +56,7 @@ int	number_check(t_data *img)
 	while (img->line[i])
 	{
 		j = 0;
-		tab = ft_split(img->line[i], ' ');
+		tab = ft_split(img->line[i], ' ');	// Faz o split da tabela pro numeros
 		if (!tab)
 		{
 			while (i > 0)

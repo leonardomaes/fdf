@@ -17,16 +17,16 @@ void    draw_line(t_data *img, int flag)
 {
 	t_draw draw;
 
-	draw.dx = fabs(img->cur_x - img->last_x);
-	draw.dy = fabs(img->cur_y - img->last_y);
-	draw.sx = (img->last_x < img->cur_x) ? 1 : -1;
-	draw.sy = (img->last_y < img->cur_y) ? 1 : -1;
+	draw.dx = fabs(img->draw.cur_x - img->draw.last_x);
+	draw.dy = fabs(img->draw.cur_y - img->draw.last_y);
+	draw.sx = (img->draw.last_x < img->draw.cur_x) ? 1 : -1;
+	draw.sy = (img->draw.last_y < img->draw.cur_y) ? 1 : -1;
 	draw.d1 = (draw.dx - draw.dy);
-	draw.x = img->last_x;
-	draw.y = img->last_y;
+	draw.x = img->draw.last_x;
+	draw.y = img->draw.last_y;
 	if (flag == 1)
 	{
-		while (draw.x <= img->cur_x)
+		while (draw.x <= img->draw.cur_x)
 		{
 			my_mlx_pixel_put(img, draw.x, draw.y, WHITE_PIXEL);
 			draw.d2 = 2 * draw.d1;
@@ -43,7 +43,7 @@ void    draw_line(t_data *img, int flag)
 		}
 	}else if (flag == 2)
 	{
-		while (draw.y <= img->cur_y)
+		while (draw.y <= img->draw.cur_y)
 		{
 			my_mlx_pixel_put(img, draw.x, draw.y, WHITE_PIXEL);
 			draw.d2 = 2 * draw.d1;
@@ -82,8 +82,8 @@ void    calculate_offsets(t_data *img)
 		i = 0;
 		while (i < img->col)
 		{
-			x = i * (img->width_x / img->col);
-			y = j * (img->height_y / img->rows);
+			x = i * (img->draw.width_x / img->col);
+			y = j * (img->draw.height_y / img->rows);
 			isometric(&x, &y, img->points[j][i]);
 			if (x < min_x) min_x = x;
 			if (y < min_y) min_y = y;
@@ -94,8 +94,8 @@ void    calculate_offsets(t_data *img)
 		
 		j++;
 	}
-	img->pos_x = (WINDOW_WIDTH - (max_x - min_x)) / 2 - min_x;
-	img->pos_y = (WINDOW_HEIGHT - (max_y - min_y)) / 2 - min_y;
+	img->draw.pos_x = (WINDOW_WIDTH - (max_x - min_x)) / 2 - min_x;
+	img->draw.pos_y = (WINDOW_HEIGHT - (max_y - min_y)) / 2 - min_y;
 }
 
 void	print_fdf(t_data *img)
@@ -106,7 +106,7 @@ void	print_fdf(t_data *img)
 	double	ly;
 
 
-	ft_bzero(img->addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->bits_per_pixel / 8));
+	ft_bzero(img->image.addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->image.bits_per_pixel / 8));
 	calculate_offsets(img);
 	j = 0;
 	while (j < img->rows)
@@ -114,39 +114,39 @@ void	print_fdf(t_data *img)
 		i = 0;
 		while (i < img->col)
 		{
-			img->last_x = (i * (img->width_x / img->col));
-			img->last_y = (j * (img->height_y / img->rows));
-			lx = img->last_x;
-			ly = img->last_y;
-			img->last_z = img->points[j][i];
-			isometric(&img->last_x, &img->last_y, img->last_z);
-			img->last_x += img->pos_x;
-			img->last_y += img->pos_y;
+			img->draw.last_x = (i * (img->draw.width_x / img->col));
+			img->draw.last_y = (j * (img->draw.height_y / img->rows));
+			lx = img->draw.last_x;
+			ly = img->draw.last_y;
+			img->draw.last_z = img->points[j][i];
+			isometric(&img->draw.last_x, &img->draw.last_y, img->draw.last_z);
+			img->draw.last_x += img->draw.pos_x;
+			img->draw.last_y += img->draw.pos_y;
 
 			if (i < img->col - 1)
 			{
-				img->cur_x =(i + 1) * (img->width_x / img->col);
-				img->cur_y = ly;
-				img->cur_z = img->points[j][i+1];
-				isometric(&img->cur_x, &img->cur_y, img->cur_z);
-				img->cur_x += img->pos_x;
-				img->cur_y += img->pos_y;
+				img->draw.cur_x =(i + 1) * (img->draw.width_x / img->col);
+				img->draw.cur_y = ly;
+				img->draw.cur_z = img->points[j][i+1];
+				isometric(&img->draw.cur_x, &img->draw.cur_y, img->draw.cur_z);
+				img->draw.cur_x += img->draw.pos_x;
+				img->draw.cur_y += img->draw.pos_y;
 				draw_line(img, 1);
 			}
 			
   			if (j < img->rows - 1)
 			{
-				img->cur_x = lx;
-				img->cur_y =(j + 1) * (img->height_y / img->rows);
-				img->cur_z = img->points[j+1][i];
-				isometric(&img->cur_x, &img->cur_y, img->cur_z);
-				img->cur_x += img->pos_x;
-				img->cur_y += img->pos_y;
+				img->draw.cur_x = lx;
+				img->draw.cur_y =(j + 1) * (img->draw.height_y / img->rows);
+				img->draw.cur_z = img->points[j+1][i];
+				isometric(&img->draw.cur_x, &img->draw.cur_y, img->draw.cur_z);
+				img->draw.cur_x += img->draw.pos_x;
+				img->draw.cur_y += img->draw.pos_y;
 				draw_line(img, 2);
 			}
 			i++;
 		}
 		j++;
 	}
-	mlx_put_image_to_window(img->mlx, img->win, img->img, 0, 0);
+	mlx_put_image_to_window(img->mlx, img->win, img->image.img, 0, 0);
 }
