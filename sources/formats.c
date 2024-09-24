@@ -98,7 +98,7 @@ void    calculate_offsets(t_data *img)
 	img->draw.pos_y = (WINDOW_HEIGHT - (max_y - min_y)) / 2 - min_y;
 }
 
-void	print_fdf(t_data *img)
+void	print_fdf(t_data *img)		// Arrumar
 {
 	int	i;
 	int	j;
@@ -118,7 +118,7 @@ void	print_fdf(t_data *img)
 			img->draw.last_y = (j * (img->draw.height_y / img->rows));
 			lx = img->draw.last_x;
 			ly = img->draw.last_y;
-			img->draw.last_z = img->points[j][i];
+			img->draw.last_z = img->points[j][i];		// J sao os rows e I as cols
 			isometric(&img->draw.last_x, &img->draw.last_y, img->draw.last_z);
 			img->draw.last_x += img->draw.pos_x;
 			img->draw.last_y += img->draw.pos_y;
@@ -149,4 +149,13 @@ void	print_fdf(t_data *img)
 		j++;
 	}
 	mlx_put_image_to_window(img->mlx, img->win, img->image.img, 0, 0);
+	printf("pos_y= %f\n", img->draw.pos_y);				//Apagar
+	printf("pos_x= %f\n", img->draw.pos_x);				//Apagar
+	printf("rows= %f\n", img->rows);				//Apagar
+	printf("cols= %f\n", img->col);					//Apagar
+	printf("pos_final_y= %f\n", img->draw.cur_y);		//Apagar
+	printf("pos_final_x= %f\n", img->draw.cur_x);		//Apagar
+	printf("height_y= %f\n", img->draw.height_y);		//Apagar
+	printf("width_x= %f\n", img->draw.width_x);			//Apagar
+	printf("zoom= %f\n", img->draw.zoom);				//Apagar
 }

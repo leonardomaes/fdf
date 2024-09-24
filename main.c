@@ -41,7 +41,7 @@ void	setup_hook(t_data *img)
 
 int main(int argv, char *argc[])
 {
-    t_data img;
+    t_data *img;
 	char	*filename;
 	
 	if (argv == 2)
@@ -51,24 +51,25 @@ int main(int argv, char *argc[])
 		file_error(1);
 		exit(1);
 	}
-	var_init(&img, filename);
-	if (file_check(&img) == 0)
+	img = (t_data *)malloc(sizeof(t_data));
+	var_init(img, filename);
+	if (file_check(img) == 0)
 		exit(1);
-	if(init_win(&img) == 0)
+	if(init_win(img) == 0)
 		exit (1);
-	if (number_check(&img) == 0)
+	if (number_check(img) == 0)
         exit(1);
-	for (size_t i = 0; i < img.rows; i++)	//Apagar
+	printf("\n");
+	for (size_t i = 0; i < img->rows; i++)	//Apagar
 	{
-		for (size_t j = 0; j < img.col; j++)
+		for (size_t j = 0; j < img->col; j++)
 		{
-			printf("%i ", (int)img.points[i][j]);
+			printf("%i ", (int)img->points[i][j]);
 		}
 		printf("\n");
-		
 	}
-	print_fdf(&img);
-	setup_hook(&img);
-	clear_all(&img);
+	print_fdf(img);
+	setup_hook(img);
+	clear_all(img);
 	return (0);
 }
