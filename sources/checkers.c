@@ -17,12 +17,14 @@ int	file_check(t_data *img)
 	int	i;
 
 	i = 0;
-	img->line[i] = get_next_line(img->fd); // if can't open then file error
+	//img->line[0] = malloc(sizeof(char *));
+	img->line[i] = get_next_line(img->fd);
 	while (img->line[i])
 	{
 		ft_printf("%s", img->line[i]);		// APAGAR
-		img->line[++i] = get_next_line(img->fd);
 		img->rows++;
+		i++;
+		img->line[i] = get_next_line(img->fd);
 	}
 	i = 0;
 	while (img->line[0][i])

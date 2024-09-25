@@ -133,7 +133,6 @@ void	print_fdf(t_data *img)		// Arrumar
 				img->draw.cur_y += img->draw.pos_y;
 				draw_line(img, 1);
 			}
-			
   			if (j < img->rows - 1)
 			{
 				img->draw.cur_x = lx;
