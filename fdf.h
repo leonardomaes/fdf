@@ -61,15 +61,27 @@ typedef struct s_info_draw // Info do desenho
 	double rotation;
 	double width_x;  // Tamando da imagem proporcionalmente ao zoom
 	double height_y; // Tamando da imagem proporcionalmente ao zoom
-	double pos_x;    // Pos Inicial do X baseado no tamanho da tela e do zoom
+	double pos_x;    // Pos Inicial do X baseado no tamanho da tela e do zoom - a a plicar isometrico para calcular pos inicial
 	double pos_y;    // Pos Inicial do Y baseado no tamanho da tela e do zoom
-	double last_x;   //
+
+	double lx;
+	double ly;
+	double last_x;   // 
 	double last_y;   //
 	double last_z;   //
 	double cur_x;    //
 	double cur_y;    //
 	double cur_z;    //
 }				t_info_draw;
+
+/* typedef struct s_points
+{
+	int x;
+	int y;
+	int z;
+	int color;
+}				t_points; */
+
 
 typedef struct s_data
 { // Struct principal
@@ -80,7 +92,6 @@ typedef struct s_data
 	void *win; // Inicia da tela
 	// floats
 	double **points; // Vetor com os valores da *Line[] em Double
-	// file
 	int fd;       // File descriptor
 	double rows;  // Qtd de linhas
 	double col;   // Qtd de colunas
@@ -123,6 +134,8 @@ typedef struct s_data
 // FORMATS
 void			draw_line(t_data *img, int flag);
 void			print_fdf(t_data *data);
+void			draw_horizontal(t_data *img, int x, int y);
+void			draw_vertical(t_data *img, int x, int y);
 
 // COMMANDS
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
@@ -133,6 +146,9 @@ void			setup_hook(t_data *img);
 int				file_check(t_data *img);
 int				number_check(t_data *img, char **line);
 
+// DRAW LINES
+void			draw_line(t_data *img, int flag);
+void			calculate_offsets(t_data *img);
 // UTILS
 void			var_init(t_data *img, char *filename);
 int				kill_all(t_data *data);

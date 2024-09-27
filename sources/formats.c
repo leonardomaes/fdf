@@ -13,98 +13,70 @@
 #include <X11/X.h>
 #include "../fdf.h"
 
-void    draw_line(t_data *img, int flag)
+void	draw_horizontal(t_data *img, int x, int y)
 {
-	t_draw draw;
-
-	draw.dx = fabs(img->draw.cur_x - img->draw.last_x);
-	draw.dy = fabs(img->draw.cur_y - img->draw.last_y);
-	draw.sx = (img->draw.last_x < img->draw.cur_x) ? 1 : -1;
-	draw.sy = (img->draw.last_y < img->draw.cur_y) ? 1 : -1;
-	draw.d1 = (draw.dx - draw.dy);
-	draw.x = img->draw.last_x;
-	draw.y = img->draw.last_y;
-	if (flag == 1)
-	{
-		while (draw.x <= img->draw.cur_x)
-		{
-			my_mlx_pixel_put(img, draw.x, draw.y, WHITE_PIXEL);
-			draw.d2 = 2 * draw.d1;
-			if (draw.d2 > -draw.dy)
-			{
-				draw.d1 -= draw.dy;
-				draw.x += draw.sx;
-			}
-			if(draw.d2 < draw.dx)
-			{
-				draw.d1 += draw.dx;
-				draw.y += draw.sy;
-			}
-		}
-	}else if (flag == 2)
-	{
-		while (draw.y <= img->draw.cur_y)
-		{
-			my_mlx_pixel_put(img, draw.x, draw.y, WHITE_PIXEL);
-			draw.d2 = 2 * draw.d1;
-			if (draw.d2 > -draw.dy)
-			{
-				draw.d1 -= draw.dy;
-				draw.x += draw.sx;
-			}
-			if(draw.d2 < draw.dx)
-			{
-				draw.d1 += draw.dx;
-				draw.y += draw.sy;
-			}
-		}
-	}
+	img->draw.cur_x = (x + 1) * (img->draw.width_x / img->col);
+	img->draw.cur_y = img->draw.ly;
+	img->draw.cur_z = img->points[y][x + 1];
+	isometric(&img->draw.cur_x, &img->draw.cur_y, img->draw.cur_z);
+	img->draw.cur_x += img->draw.pos_x;
+	img->draw.cur_y += img->draw.pos_y;
+	draw_line(img, 1);
 }
 
-void    calculate_offsets(t_data *img)
+void	draw_vertical(t_data *img, int x, int y)
 {
-	double min_x;
-	double min_y;
-	double max_x;
-	double max_y;
-	double	x;
-	double	y;
-	int i;
-	int	j;
-
-	min_x = WINDOW_WIDTH;
-	min_y = WINDOW_HEIGHT;
-	max_x = 0;
-	max_y = 0;
-	j = 0;
-	while (j < img->rows)
-	{
-		i = 0;
-		while (i < img->col)
-		{
-			x = i * (img->draw.width_x / img->col);
-			y = j * (img->draw.height_y / img->rows);
-			isometric(&x, &y, img->points[j][i]);
-			if (x < min_x) min_x = x;
-			if (y < min_y) min_y = y;
-			if (x > max_x) max_x = x;
-			if (y > max_y) max_y = y;
-			i++;
-		}
-		
-		j++;
-	}
-	img->draw.pos_x = (WINDOW_WIDTH - (max_x - min_x)) / 2 - min_x;
-	img->draw.pos_y = (WINDOW_HEIGHT - (max_y - min_y)) / 2 - min_y;
+	img->draw.cur_x = img->draw.lx;
+	img->draw.cur_y = (y + 1) * (img->draw.height_y / img->rows);
+	img->draw.cur_z = img->points[y + 1][x];
+	isometric(&img->draw.cur_x, &img->draw.cur_y, img->draw.cur_z);
+	img->draw.cur_x += img->draw.pos_x;
+	img->draw.cur_y += img->draw.pos_y;
+	draw_line(img, 2);
 }
 
-void	print_fdf(t_data *img)		// Arrumar
+void print_fdf(t_data	*img)
+{
+	int	x;
+	int	y;
+
+	calculate_offsets(img);		// Pega a pos inicial do x e y
+	y = 0;
+	while (y < img->rows)
+	{
+		x = 0;
+		while (x < img->col)
+		{
+			img->draw.last_x = (x * (img->draw.width_x / img->col));
+			img->draw.last_y = (y * (img->draw.height_y / img->rows));
+			img->draw.lx = img->draw.last_x;
+			img->draw.ly = img->draw.last_y;
+			img->draw.last_z = img->points[y][x];
+			isometric(&img->draw.last_x, &img->draw.last_y, img->draw.last_z);
+			img->draw.last_x += img->draw.pos_x;
+			img->draw.last_y += img->draw.pos_y;
+			if (x < img->col - 1)
+			{
+				draw_horizontal(img, x, y);
+			}
+			if (y < img->rows - 1)
+			{
+				draw_vertical(img, x, y);
+			}
+			x++;
+		}
+		y++;
+	}
+	mlx_put_image_to_window(img->mlx, img->win, img->image.img, 0, 0);
+}
+
+
+/* void	print_fdf(t_data *img)		// Arrumar
 {
 	int	i;
 	int	j;
 	double	lx;
 	double	ly;
-
 
 	ft_bzero(img->image.addr, WINDOW_WIDTH * WINDOW_HEIGHT * (img->image.bits_per_pixel / 8));
 	calculate_offsets(img);
@@ -118,13 +90,13 @@ void	print_fdf(t_data *img)		// Arrumar
 			img->draw.last_y = (j * (img->draw.height_y / img->rows));
 			lx = img->draw.last_x;
 			ly = img->draw.last_y;
-			img->draw.last_z = img->points[j][i];		// J sao os rows e I as cols
+			img->draw.last_z = img->points[j][i];
 			isometric(&img->draw.last_x, &img->draw.last_y, img->draw.last_z);
-			img->draw.last_x += img->draw.pos_x;
+			img->draw.last_x += img->draw.pos_x;		// pos_x = Posicao inicial ja com isometrico aplicado
 			img->draw.last_y += img->draw.pos_y;
-
-			if (i < img->col - 1)
+			if (i < img->col - 1)			// Desenhar coluna (vertical)
 			{
+				//printf("\ni%i -", i);
 				img->draw.cur_x =(i + 1) * (img->draw.width_x / img->col);
 				img->draw.cur_y = ly;
 				img->draw.cur_z = img->points[j][i+1];
@@ -133,8 +105,9 @@ void	print_fdf(t_data *img)		// Arrumar
 				img->draw.cur_y += img->draw.pos_y;
 				draw_line(img, 1);
 			}
-  			if (j < img->rows - 1)
+  			if (j < img->rows - 1)			// Desenhar linha (horizontal)
 			{
+				//printf(" j%i\n", j);
 				img->draw.cur_x = lx;
 				img->draw.cur_y =(j + 1) * (img->draw.height_y / img->rows);
 				img->draw.cur_z = img->points[j+1][i];
@@ -157,4 +130,4 @@ void	print_fdf(t_data *img)		// Arrumar
 	printf("height_y= %f\n", img->draw.height_y);		//Apagar
 	printf("width_x= %f\n", img->draw.width_x);			//Apagar
 	printf("zoom= %f\n", img->draw.zoom);				//Apagar
-}
+} */

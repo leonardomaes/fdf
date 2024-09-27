@@ -115,19 +115,17 @@ int file_check(t_data *img)
     char    **all_lines;
     int     line_count;
 
-    img->rows = 0;
-    img->col = 0;
     line_count = 0;
     all_lines = (char **)malloc(sizeof(char *) * 1000);
     if (!all_lines)
         return (0);
-    line = get_next_line(img->fd);
+    line = get_next_line(img->fd);		//Pega a primeira linha para comecar o loop
     while (line)
     {
-        all_lines[line_count] = line;
+        all_lines[line_count] = line;	//Passa a primeira linha para o all_lines
         line_count++;
         img->rows++;
-        if (img->rows == 1)
+        if (img->rows == 1)				//Se for a primeira ocorrencia, faz o split_line para contar as colunas
         {
             split_line = ft_split(line, ' ');
             if (!split_line)
@@ -138,13 +136,8 @@ int file_check(t_data *img)
             i = 0;
             while (split_line[i])
             {
-                img->col++;
-                i++;
-            }
-            i = 0;
-            while (split_line[i])
-            {
                 free(split_line[i]);
+				img->col++;
                 i++;
             }
             free(split_line);
@@ -163,7 +156,7 @@ int file_check(t_data *img)
         free(all_lines[i]);
     free(all_lines);
     close(img->fd);
-    return (1)
+    return (1);
 }
 
 int	number_check(t_data *img, char **line)
@@ -174,7 +167,6 @@ int	number_check(t_data *img, char **line)
 	double	**points;
 	char	**tab;
 
-	i = 0;
 	old = 0;
 	points = alloc_points(img);
 	if (!points)

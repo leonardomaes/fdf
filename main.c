@@ -42,10 +42,10 @@ int main(int argc, char *argv[])
 	}
 	img = init_win(argv[1]);
 	var_init(img, filename);
-	printf("\n\nA\n\n");
-
 	if (file_check(img) == 0)
 		exit(1);
+
+
 	printf("\n");
  	for (size_t i = 0; i < img->rows; i++)	//Apagar
 	{
@@ -55,7 +55,6 @@ int main(int argc, char *argv[])
 		}
 		printf("\n");
 	}
-
 
 
 	setup_hook(img);
