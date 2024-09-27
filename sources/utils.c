@@ -93,3 +93,5 @@ void file_error(int flag)
     else if(flag == 2)
         ft_printf("ERROR:\nMap in wrong format, check the edges!");
 }
+
+

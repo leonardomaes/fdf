@@ -13,63 +13,55 @@
 #include <X11/X.h>
 #include "fdf.h"
 
-int	init_win(t_data *img)
+t_data	*init_win(const char *path)
 {
-	img->mlx = mlx_init();
-	if (img->mlx == NULL)
-	{
-		mlx_destroy_display(img->mlx);
-		return (0);
-	}
-	img->win = mlx_new_window(img->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, "FDF");
-	if (img->win == NULL)
-	{
-		free (img->mlx);
-		return (0);
-	}
-	img->image.img = mlx_new_image(img->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
-	img->image.addr = mlx_get_data_addr(img->image.img, &img->image.bits_per_pixel, &img->image.line_length, &img->image.endian);
-	return (1);	
+	t_data	*fdf;
+	fdf = (t_data *)malloc(sizeof(t_data));
+	if (!fdf)
+		exit(1);
+	fdf->mlx = mlx_init();
+	if (!fdf->mlx)
+		exit(1);
+	fdf->win = mlx_new_window(fdf->mlx, WINDOW_WIDTH, WINDOW_HEIGHT, ft_strjoin("FDF - ", path));
+	fdf->image.img = mlx_new_image(fdf->mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
+	fdf->image.addr = mlx_get_data_addr(fdf->image.img, &fdf->image.bits_per_pixel, &fdf->image.line_length, &fdf->image.endian);
+	return (fdf);	
 }
 
-void	setup_hook(t_data *img)
+int main(int argc, char *argv[])
 {
-	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
-	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
-	mlx_loop(img->mlx);
-}
-
-int main(int argv, char *argc[])
-{
-    t_data img;
+    t_data *img;
 	char	*filename;
 	
-	if (argv == 2)
-		filename = argc[1];
+	if (argc == 2)
+		filename = argv[1];
 	else
 	{
 		file_error(1);
 		exit(1);
 	}
-	//img = (t_data *)malloc(sizeof(t_data));
-	var_init(&img, filename);
-	if (file_check(&img) == 0)
+	img = init_win(argv[1]);
+	var_init(img, filename);
+	printf("\n\nA\n\n");
+
+	if (file_check(img) == 0)
 		exit(1);
-	if(init_win(&img) == 0)
-		exit (1);
-	if (number_check(&img) == 0)
-        exit(1);
 	printf("\n");
- 	for (size_t i = 0; i < img.rows; i++)	//Apagar
+ 	for (size_t i = 0; i < img->rows; i++)	//Apagar
 	{
-		for (size_t j = 0; j < img.col; j++)
+		for (size_t j = 0; j < img->col; j++)
 		{
-			printf("%i ", (int)img.points[i][j]);
+			printf("%i ", (int)img->points[i][j]);
 		}
 		printf("\n");
 	}
-	print_fdf(&img);
-	setup_hook(&img);
-	clear_all(&img);
+
+
+
+	setup_hook(img);
+	print_fdf(img);
+	mlx_loop(img->mlx);
+
+	clear_all(img);
 	return (0);
 }

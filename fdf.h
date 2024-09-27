@@ -127,10 +127,11 @@ void			print_fdf(t_data *data);
 // COMMANDS
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int				check_key(int keycode, t_data *img);
+void			setup_hook(t_data *img);
 
 // CHECKERS
 int				file_check(t_data *img);
-int				number_check(t_data *img);
+int				number_check(t_data *img, char **line);
 
 // UTILS
 void			var_init(t_data *img, char *filename);

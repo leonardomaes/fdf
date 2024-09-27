@@ -31,3 +31,9 @@ int	check_key(int keysym, t_data *img)
 	}
 	return (0);
 }
+
+void	setup_hook(t_data *img)
+{
+	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
+	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
+}
