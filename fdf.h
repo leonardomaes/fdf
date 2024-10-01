@@ -35,15 +35,22 @@
 
 typedef struct s_draw // Para desenhar as linhas
 {
+	int	sx;
+	int	sy;
 	double dx;
 	double dy;
-	double d1;
-	double d2;
-	double x;
-	double y;
-	double sx;
-	double sy;
+	int err;
+	int	e2;
 }				t_draw;
+
+typedef struct s_offset
+{
+	double	min_x;
+	double	max_x;
+	double	min_y;
+	double	max_y;
+}				t_offset;
+
 
 typedef struct s_image // imagem/janela do MLX
 {
@@ -52,50 +59,35 @@ typedef struct s_image // imagem/janela do MLX
 	int bits_per_pixel;
 	int line_length;
 	int endian;
+	void *mlx;
+	void *win;
 }				t_image;
 
-typedef struct s_info_draw // Info do desenho
+typedef struct s_info
 {
-	double zoom; // Quantidade de zoom
-	double zoom_max;
-	double rotation;
-	double width_x;  // Tamando da imagem proporcionalmente ao zoom
-	double height_y; // Tamando da imagem proporcionalmente ao zoom
-	double pos_x;    // Pos Inicial do X baseado no tamanho da tela e do zoom - a a plicar isometrico para calcular pos inicial
-	double pos_y;    // Pos Inicial do Y baseado no tamanho da tela e do zoom
+	int	rows;		// HEIGHT - altura
+	int	cols;		// WIDTH - largura
+	double	width;
+	double	height;
+	double	zoom;
+	double	x_offset;
+	double	y_offset;
+}				t_info;
 
-	double lx;
-	double ly;
-	double last_x;   // 
-	double last_y;   //
-	double last_z;   //
-	double cur_x;    //
-	double cur_y;    //
-	double cur_z;    //
-}				t_info_draw;
-
-/* typedef struct s_points
+typedef struct s_points
 {
-	int x;
-	int y;
+	double x;
+	double y;
 	int z;
 	int color;
-}				t_points; */
-
+}				t_points;
 
 typedef struct s_data
-{ // Struct principal
-	t_image		image;
-	t_info_draw	draw;
-	// mlx
-	void *mlx; // Inicia do programa
-	void *win; // Inicia da tela
-	// floats
-	double **points; // Vetor com os valores da *Line[] em Double
-	int fd;       // File descriptor
-	double rows;  // Qtd de linhas
-	double col;   // Qtd de colunas
-	char *line[]; // Linha obtida pelo GNL
+{
+	char		*filename;
+	t_image 	mlx;
+	t_info		*map;
+	t_points 	**points;
 }				t_data;
 
 /***********************************************/
@@ -131,33 +123,39 @@ typedef struct s_data
 /***********************************************/
 /*				Declarations					*/
 /***********************************************/
-// FORMATS
-void			draw_line(t_data *img, int flag);
-void			print_fdf(t_data *data);
-void			draw_horizontal(t_data *img, int x, int y);
-void			draw_vertical(t_data *img, int x, int y);
+
+// MAIN
+t_data	*init_win(const char *path);
+
+// CHECKERS
+int				count_cols(char *line, int expected_cols);
+t_info			*read_map(t_data *fdf);
+t_points		*get_data(char	*line, t_data *fdf, int y);
+t_points		**fill_points(t_data *fdf);
+int				file_check(t_data *fdf);
 
 // COMMANDS
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int				check_key(int keycode, t_data *img);
+int				check_key(int keysym, t_data *img);
 void			setup_hook(t_data *img);
 
-// CHECKERS
-int				file_check(t_data *img);
-int				number_check(t_data *img, char **line);
-
-// DRAW LINES
-void			draw_line(t_data *img, int flag);
-void			calculate_offsets(t_data *img);
-// UTILS
-void			var_init(t_data *img, char *filename);
-int				kill_all(t_data *data);
+// EXITS
+void			free_points(t_data *fdf);
+void			free_split(char **data);
 void			clear_all(t_data *data);
-double			**alloc_points(t_data *img);
-void			file_error(int flag);
+int				kill_all(t_data *data);
 
-//	MATH
-void			isometric(double *x, double *y, double z);
+// FORMATS
+void			bresenham(t_points a, t_points b, t_data *fdf);
+void			draw_lines(t_data *fdf, t_points a, t_points b);
+void			print_fdf(t_data *fdf);
+
+// MATH
+void    		calculate_offset(t_data *fdf);
+void    		isometric(double *x, double *y, int z);
 double			ft_abs(float n);
+
+// UTILS
+void			var_init(t_data *fdf);
 
 #endif

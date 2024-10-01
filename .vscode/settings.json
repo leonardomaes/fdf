@@ -3,6 +3,7 @@
         "x.h": "c",
         "fdf.h": "c",
         "cmath": "c",
-        "mlx_int.h": "c"
+        "mlx_int.h": "c",
+        "*.tcc": "c"
     }
 }

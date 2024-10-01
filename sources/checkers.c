@@ -12,194 +12,157 @@
 
 #include "../fdf.h"
 
-/* int	file_check(t_data *img)
+int	count_cols(char *line, int expected_cols)
 {
-	int		i;
-	char	**line;
+	char	**split_line;
+	int	cols;
 
-	i = 0;
-	img->line[i] = get_next_line(img->fd);
-	printf("\n\nA\n\n");
-	while (img->line[i])
-	{
-		//ft_printf("%s", img->line[i]);		// APAGAR
-		img->rows++;
-		i++;
-		img->line[i] = get_next_line(img->fd);
-	}
-	i = 0;
-	while (img->line[0][i])
-	{
-		if (img->line[0][i] == ' ' && ft_isdigit(img->line[0][i+1]))
-			img->col++;
-		i++;
-	}
-	img->col++;
-	if (number_check() == 0)
-	{
-		return (0);
-	}
-	
-	close(img->fd);
-	return (1);
-}
- */
-
-/* int	file_check(t_data *img)
-{
-	int		i;
-	char	**line;
-
-	i = 0;
-	line = NULL;
-	line[i] = get_next_line(img->fd);
-	while (line[i])
-	{
-		img->rows++;
-		i++;
-		line[i] = get_next_line(img->fd);
-	}
-	i = 0;
-	while (line[0][i])
-	{
-		if (line[0][i] == ' ' && ft_isdigit(line[0][i+1]))
-			img->col++;
-		i++;
-	}
-	img->col++;
-	if (number_check(img, line) == 0)
-	{
-		return (0);
-	}
-	close(img->fd);
-	return (1);
-} */
-
-/* int	file_check(t_data *img)
-{
-	int		i;
-	char	**line;
-
-	i = 0;
-	line[i] = NULL;
-	line[i] = get_next_line(img->fd);
-	printf("\n\nA\n\n");
-	while (line[i])
-	{
-		//ft_printf("%s", img->line[i]);		// APAGAR
-		img->rows++;
-		i++;
-		line[i] = get_next_line(img->fd);
-	}
-	i = 0;
-	while (line[0][i])
-	{
-		if (line[0][i] == ' ' && ft_isdigit(line[0][i+1]))
-			img->col++;
-		i++;
-	}
-	img->col++;
-	if (number_check(img, line) == 0)
-	{
-		return (0);
-	}
-	close(img->fd);
-	return (1);
-} */
-
-int file_check(t_data *img)
-{
-    int     i;
-    char    *line;
-    char    **split_line;
-    char    **all_lines;
-    int     line_count;
-
-    line_count = 0;
-    all_lines = (char **)malloc(sizeof(char *) * 1000);
-    if (!all_lines)
-        return (0);
-    line = get_next_line(img->fd);		//Pega a primeira linha para comecar o loop
-    while (line)
-    {
-        all_lines[line_count] = line;	//Passa a primeira linha para o all_lines
-        line_count++;
-        img->rows++;
-        if (img->rows == 1)				//Se for a primeira ocorrencia, faz o split_line para contar as colunas
-        {
-            split_line = ft_split(line, ' ');
-            if (!split_line)
-            {
-                free(line);
-                return (0);
-            }
-            i = 0;
-            while (split_line[i])
-            {
-                free(split_line[i]);
-				img->col++;
-                i++;
-            }
-            free(split_line);
-        }
-        line = get_next_line(img->fd);
-    }
-    if (number_check(img, all_lines) == 0)
-    {
-        for (i = 0; i < line_count; i++)
-            free(all_lines[i]);
-        free(all_lines);
-        close(img->fd);
-        return (0);
-    }
-    for (i = 0; i < line_count; i++)
-        free(all_lines[i]);
-    free(all_lines);
-    close(img->fd);
-    return (1);
+	split_line = ft_split(line, ' ');
+	cols = 0;
+	while (split_line[cols])
+		cols++;
+	free_split(split_line);
+	if (expected_cols == 0)
+		return (cols);
+	if (cols != expected_cols)
+		return (-1);
+	return (cols);
 }
 
-int	number_check(t_data *img, char **line)
+t_info	*read_map(t_data *fdf)
 {
-	int		i;
-	int		j;
-	int		old;
-	double	**points;
-	char	**tab;
+	int		fd;
+	int		cols;
+	char	*line;
+	t_info	*map;
 
-	old = 0;
-	points = alloc_points(img);
+	map = malloc(sizeof(t_info));
+	map->cols = 0;
+	map->rows = 0;
+	fd = open(fdf->filename, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("ERROR:\nFile doesn't exist or couldn't open!\n");
+		exit (1);
+	}
+	line = get_next_line(fd);
+	if (!line)
+	{
+		ft_printf("ERROR:\nEmpty line!\n");
+		close(fd);
+		return (NULL);
+	}
+	while (line)
+	{
+		cols = count_cols(line, map->cols);
+		if (cols == -1)
+		{
+			ft_printf("ERROR:\nMap in wrong format, check the edges!\n");
+			exit(1);
+		}
+		if (map->cols == 0)
+		{
+			map->cols = cols;
+		}
+		free(line);
+		line = get_next_line(fd);
+		map->rows++;
+	}
+	free(line);
+	close(fd);
+	return (map);
+}
+
+t_points	*get_data(char	*line, t_data *fdf, int y)
+{
+	int		x;
+	char	**data;
+	char	**sep_data;
+	t_points	*points;
+
+	x = 0;
+	points = malloc(fdf->map->cols * sizeof(t_points));
 	if (!points)
-		return(0);
-	i = 0;
-	while (line[i])
+		return (NULL);
+	data = ft_split(line, ' ');
+	while (data[x])
 	{
-		j = 0;
-		tab = ft_split(line[i], ' ');	// Faz o split da tabela pro numeros
-		if (!tab)
+		sep_data  = ft_split(data[x], ',');
+		points[x].x = x;
+		points[x].y = y;
+		points[x].z = ft_atoi(sep_data[0]);
+		if (sep_data[1])
 		{
-			while (i > 0)
-				free(points[--i]);
-			free(points);
-			return (0);
+			points[x].color = ft_atoi_hex(sep_data[1]);
 		}
-		while (tab[j])
-		{
-			points[i][j] = ft_atoi(tab[j]);
-			j++;
-		}
-		if (old == 0)
-			old = j;
-		img->col = old;
-		if (j != old)				// Confere se os tamanhos de todas as linhas sao iguais
-		{
-			file_error(2);
-			return (0);
-		}
-		i++;
-		free(tab);
+		else
+			points[x].color = WHITE_PIXEL;
+		x++;
+		free_split(sep_data);
 	}
-	img->points = points;
-	i = 0;
-	return (1);
+	free_split(data);
+	return (points);
+}
+
+t_points **fill_points(t_data *fdf)
+{
+	int			y;
+	int			fd;
+	char		*line;
+	t_points	**points;
+	
+	y = 0;
+	fd = open(fdf->filename, O_RDONLY);
+	if (fd < 0)
+	{
+		ft_printf("ERROR:\nFile doesn't exist or couldn't open!\n");
+		exit (1);
+	}
+	points = malloc(fdf->map->rows * sizeof(t_points *));
+	if (!points)
+		return (NULL);
+	line = get_next_line(fd);
+	while (line)
+	{
+		points[y] = get_data(line, fdf, y);
+		if (points[y] == NULL)
+		{
+			while (y-- > 0)
+			{
+				free(points[y]);
+			}
+			free(points);
+			free(line);
+			close(fd);
+			return (NULL);
+		}
+		free(line);
+		y++;
+		line = get_next_line(fd);
+	}
+	free(line);
+	close(fd);
+	return (points);
+}
+
+int	file_check(t_data *fdf)
+{
+	int	size;
+
+	size = ft_strlen(fdf->filename);
+	if (ft_strncmp(fdf->filename + (size - 4), ".fdf", 4) != 0)
+	{
+		ft_printf("ERROR:\nFile specified in wrong format!\n");
+		exit (1);
+	}
+	fdf->map = read_map(fdf);
+	if (fdf->map == NULL)
+		exit(1);
+	fdf->points = fill_points(fdf);
+/* 	printf("\nrows: %i\n", fdf->map->rows);
+	printf("cols: %i\n", fdf->map->cols);
+	printf("X: %f\n", fdf->points[3][3].x);
+	printf("Y: %f\n", fdf->points[3][3].y);
+	printf("Z: %i\n", fdf->points[3][3].z); */
+	return (0);
 }

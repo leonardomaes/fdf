@@ -16,7 +16,7 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
 	char	*dst;
 
-	dst = data->image.addr + (y * data->image.line_length + x * (data->image.bits_per_pixel / 8));
+	dst = data->mlx.addr + (y * data->mlx.line_length + x * (data->mlx.bits_per_pixel / 8));
 	*(unsigned int*)dst = color;
 }
 
@@ -26,14 +26,12 @@ int	check_key(int keysym, t_data *img)
 	if (keysym == ESC)
 	{
 		kill_all(img);
-		write(1, "\nClosed\n", 8);
-		exit (1);
 	}
 	return (0);
 }
 
 void	setup_hook(t_data *img)
 {
-	mlx_hook(img->win, KeyPress, KeyPressMask, &check_key, img);
-	mlx_hook(img->win, DestroyNotify, 0, &kill_all, img);
+	mlx_hook(img->mlx.win, KeyPress, KeyPressMask, &check_key, img);
+	mlx_hook(img->mlx.win, DestroyNotify, 0, &kill_all, img);
 }
