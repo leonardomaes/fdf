@@ -15,8 +15,9 @@
 void	var_init(t_data *fdf)
 {
 	fdf->map->zoom = 0.50;
-	fdf->map->width = WINDOW_WIDTH * fdf->map->zoom;
-	fdf->map->height = WINDOW_HEIGHT * fdf->map->zoom;
+	fdf->map->size = 0;
+	fdf->map->x_offset = WINDOW_WIDTH * 2 / 5;
+	fdf->map->y_offset = WINDOW_HEIGHT * 1 / 5;
 }
 
 /* void	var_init(t_data *img, char *filename)

@@ -72,6 +72,7 @@ typedef struct s_info
 	double	zoom;
 	double	x_offset;
 	double	y_offset;
+	double	size;
 }				t_info;
 
 typedef struct s_points

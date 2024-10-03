@@ -42,11 +42,11 @@ int main(int argc, char *argv[])
 		fdf = init_win(argv[1]);
 		if (file_check(fdf) == 1)
 			return (1);
-		printf("\n AAA \n");
 		var_init(fdf);
 		print_fdf(fdf);
-		printf("\n ZZZ \n");
-		setup_hook(fdf);
+		//mlx_key_hook(fdf->mlx.win, check_key, fdf);
+		mlx_hook(fdf->mlx.win, KeyPress, KeyPressMask, check_key, fdf);
+		mlx_hook(fdf->mlx.win, DestroyNotify, 0, kill_all, fdf);
 		mlx_loop(fdf->mlx.mlx);
 	}
 	else

@@ -49,18 +49,22 @@ void	bresenham(t_points a, t_points b, t_data *fdf)
 
 void	draw_lines(t_data *fdf, t_points a, t_points b)
 {
+	fdf->map->width = WINDOW_WIDTH * fdf->map->zoom;
+	fdf->map->height = WINDOW_HEIGHT * fdf->map->zoom;
 	a.x = a.x * (fdf->map->width / fdf->map->cols);
 	a.y = a.y * (fdf->map->height / fdf->map->rows);
 	b.x = b.x * (fdf->map->width / fdf->map->cols);
-	b.y = b.y * (fdf->map->height / fdf->map->rows);
-	fdf->map->x_offset = WINDOW_WIDTH * 2 / 5;
-	fdf->map->y_offset = WINDOW_HEIGHT * 1 / 5;
-	isometric(&a.x, &a.y, a.z);
-	isometric(&b.x, &b.y, b.z);
+	b.y = b.y * (fdf->map->height / fdf->map->rows);	
+	isometric(&a.x, &a.y, a.z - fdf->map->zoom);
+	isometric(&b.x, &b.y, b.z - fdf->map->zoom);
 	a.x += fdf->map->x_offset;
 	a.y += fdf->map->y_offset;
 	b.x += fdf->map->x_offset;
 	b.y += fdf->map->y_offset;
+	/* if (a.z != 0)
+	{
+		printf("%i", a.z);
+	} */
 	bresenham(a, b, fdf);
 }
 
@@ -68,6 +72,8 @@ void	print_fdf(t_data *fdf)
 {
 	int	x;
 	int	y;
+
+	ft_bzero(fdf->mlx.addr, WINDOW_WIDTH * WINDOW_HEIGHT * (fdf->mlx.bits_per_pixel / 8));
 	y = 0;
 	while (y < fdf->map->cols)
 	{
@@ -76,15 +82,13 @@ void	print_fdf(t_data *fdf)
 		{
 			if (x < fdf->map->rows - 1)
 			{
-				printf("\n %i \n", x);
+				//printf("\n%i ", x);
 				draw_lines(fdf, fdf->points[x][y], fdf->points[x + 1][y]);
-				printf(" 4444 \n");
 			}
 			if (y < fdf->map->cols - 1)
 			{
-				printf("\n %i \n", y);
+				//printf("- %i", y);
 				draw_lines(fdf, fdf->points[x][y], fdf->points[x][y + 1]);
-				printf(" 6666 \n");
 			}
 			x++;
 		}

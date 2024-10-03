@@ -20,18 +20,68 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 	*(unsigned int*)dst = color;
 }
 
-// KEYBOARD COMMANDS
-int	check_key(int keysym, t_data *img)
+int	is_key(int	key)
 {
-	if (keysym == ESC)
-	{
-		kill_all(img);
-	}
-	return (0);
+	return (key == XK_Up || key == XK_Down || key == XK_Left \
+			|| key == XK_Right || key == XK_r || key == XK_Shift_L \
+			|| key == XK_Control_L || XK_e || XK_q);
 }
 
-void	setup_hook(t_data *img)
+void	do_key(int keysym, t_data *fdf)
 {
-	mlx_hook(img->mlx.win, KeyPress, KeyPressMask, &check_key, img);
-	mlx_hook(img->mlx.win, DestroyNotify, 0, &kill_all, img);
+	if (keysym == XK_Up)
+	{
+		if (fdf->map->cols > 70)
+			fdf->map->y_offset -= 30;
+		else
+			fdf->map->y_offset -= 10;
+		printf("\n Up");
+	}
+	if (keysym == XK_Down)
+	{
+		if (fdf->map->cols > 70)
+			fdf->map->y_offset += 30;
+		else
+			fdf->map->y_offset += 10;
+		printf("\n Down");
+	}
+	if (keysym == XK_Left)
+	{
+		fdf->map->x_offset -= 10;
+		printf("\n Left");
+	}
+	if (keysym == XK_Right)
+	{
+		fdf->map->x_offset += 10;
+		printf("\n Right");
+	}
+	if (keysym == XK_Control_L && fdf->map->zoom > 0.2)
+		fdf->map->zoom -= 0.1;
+	if (keysym == XK_Shift_L)
+		fdf->map->zoom += 0.1;
+	if (keysym == XK_e)
+	{
+		fdf->map->size += 5;
+	}
+	if (keysym == XK_q)
+		fdf->map->size -= 5;
+
+	if (keysym == XK_r)
+		var_init(fdf);
+}
+
+// KEYBOARD COMMANDS
+int	check_key(int keysym, t_data *fdf)
+{
+	if (is_key(keysym))
+	{
+		mlx_clear_window(fdf->mlx.mlx, fdf->mlx.win);
+		do_key(keysym, fdf);
+		print_fdf(fdf);
+	}
+	if (keysym == XK_Escape)
+	{
+		kill_all(fdf);
+	}
+	return (0);
 }
