@@ -44,7 +44,6 @@ int main(int argc, char *argv[])
 			return (1);
 		var_init(fdf);
 		print_fdf(fdf);
-		//mlx_key_hook(fdf->mlx.win, check_key, fdf);
 		mlx_hook(fdf->mlx.win, KeyPress, KeyPressMask, check_key, fdf);
 		mlx_hook(fdf->mlx.win, DestroyNotify, 0, kill_all, fdf);
 		mlx_loop(fdf->mlx.mlx);

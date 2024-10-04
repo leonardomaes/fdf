@@ -22,9 +22,11 @@ void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 
 int	is_key(int	key)
 {
-	return (key == XK_Up || key == XK_Down || key == XK_Left \
-			|| key == XK_Right || key == XK_r || key == XK_Shift_L \
-			|| key == XK_Control_L || XK_e || XK_q);
+	return (key == XK_Up || key == XK_Down || key == XK_Left || key == XK_Right \
+			|| key == XK_r || key == XK_Shift_L || key == XK_Control_L\
+			 || key == XK_w || key == XK_s || key == XK_a || key == XK_d\
+			 || key == XK_q || key == XK_e || key == XK_1 || key == XK_2\
+			  || key == XK_3);
 }
 
 void	do_key(int keysym, t_data *fdf)
@@ -35,7 +37,6 @@ void	do_key(int keysym, t_data *fdf)
 			fdf->map->y_offset -= 30;
 		else
 			fdf->map->y_offset -= 10;
-		printf("\n Up");
 	}
 	if (keysym == XK_Down)
 	{
@@ -43,29 +44,53 @@ void	do_key(int keysym, t_data *fdf)
 			fdf->map->y_offset += 30;
 		else
 			fdf->map->y_offset += 10;
-		printf("\n Down");
 	}
 	if (keysym == XK_Left)
 	{
-		fdf->map->x_offset -= 10;
-		printf("\n Left");
+		if (fdf->map->cols > 70)
+		{
+			fdf->map->x_offset -= 30;
+		}
+		else
+			fdf->map->x_offset -= 10;
 	}
 	if (keysym == XK_Right)
 	{
-		fdf->map->x_offset += 10;
-		printf("\n Right");
+		if (fdf->map->cols > 70)
+		{
+			fdf->map->x_offset += 30;
+		}
+		else
+			fdf->map->x_offset += 10;
 	}
 	if (keysym == XK_Control_L && fdf->map->zoom > 0.2)
 		fdf->map->zoom -= 0.1;
 	if (keysym == XK_Shift_L)
 		fdf->map->zoom += 0.1;
-	if (keysym == XK_e)
+	if (keysym == XK_w)
 	{
-		fdf->map->size += 5;
+		apply_size(fdf, 1);
 	}
+	if (keysym == XK_s)
+	{
+		apply_size(fdf, -1);
+	}
+	if (keysym == XK_e)
+		fdf->map->angle += 5;
 	if (keysym == XK_q)
-		fdf->map->size -= 5;
-
+		fdf->map->angle -= 5;
+	if (keysym == XK_a)
+		get_next_color(fdf, -1);
+	if (keysym == XK_d)
+		get_next_color(fdf, 1);
+	
+	if (keysym == XK_1)
+		apply_rotate(fdf, 1);
+	if (keysym == XK_2)
+		apply_rotate(fdf, 2);
+	if (keysym == XK_3)
+		apply_rotate(fdf, 2);
+	
 	if (keysym == XK_r)
 		var_init(fdf);
 }

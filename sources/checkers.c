@@ -20,7 +20,9 @@ int	count_cols(char *line, int expected_cols)
 	split_line = ft_split(line, ' ');
 	cols = 0;
 	while (split_line[cols])
-		cols++;
+	{
+			cols++;
+	}
 	free_split(split_line);
 	if (expected_cols == 0)
 		return (cols);
@@ -48,12 +50,13 @@ t_info	*read_map(t_data *fdf)
 	line = get_next_line(fd);
 	if (!line)
 	{
-		ft_printf("ERROR:\nEmpty line!\n");
+		ft_printf("ERROR:\nFile can't be readed!\n");
 		close(fd);
 		return (NULL);
 	}
 	while (line)
 	{
+		line = ft_strtrim(line, "\n");
 		cols = count_cols(line, map->cols);
 		if (cols == -1)
 		{
@@ -91,12 +94,13 @@ t_points	*get_data(char	*line, t_data *fdf, int y)
 		points[x].x = x;
 		points[x].y = y;
 		points[x].z = ft_atoi(sep_data[0]);
+		points[x].original_z = ft_atoi(sep_data[0]);
 		if (sep_data[1])
 		{
 			points[x].color = ft_atoi_hex(sep_data[1]);
 		}
 		else
-			points[x].color = WHITE_PIXEL;
+			points[x].color = 0;
 		x++;
 		free_split(sep_data);
 	}
@@ -124,6 +128,7 @@ t_points **fill_points(t_data *fdf)
 	line = get_next_line(fd);
 	while (line)
 	{
+		line = ft_strtrim(line, "\n");
 		points[y] = get_data(line, fdf, y);
 		if (points[y] == NULL)
 		{

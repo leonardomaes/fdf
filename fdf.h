@@ -33,7 +33,7 @@
 /*					Structs						*/
 /***********************************************/
 
-typedef struct s_draw // Para desenhar as linhas
+typedef struct s_draw		 // Bresenham
 {
 	int	sx;
 	int	sy;
@@ -52,7 +52,7 @@ typedef struct s_offset
 }				t_offset;
 
 
-typedef struct s_image // imagem/janela do MLX
+typedef struct s_image		// MLX
 {
 	void *img;
 	char *addr;
@@ -63,7 +63,7 @@ typedef struct s_image // imagem/janela do MLX
 	void *win;
 }				t_image;
 
-typedef struct s_info
+typedef struct s_info		// Map info
 {
 	int	rows;		// HEIGHT - altura
 	int	cols;		// WIDTH - largura
@@ -73,13 +73,17 @@ typedef struct s_info
 	double	x_offset;
 	double	y_offset;
 	double	size;
+	int		angle;
+	int		color;
+	int		size_applyed;
 }				t_info;
 
-typedef struct s_points
+typedef struct s_points		// Matriz dos valores
 {
 	double x;
 	double y;
 	int z;
+	int	original_z;
 	int color;
 }				t_points;
 
@@ -138,7 +142,6 @@ int				file_check(t_data *fdf);
 // COMMANDS
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int				check_key(int keysym, t_data *img);
-void			setup_hook(t_data *img);
 
 // EXITS
 void			free_points(t_data *fdf);
@@ -147,16 +150,22 @@ void			clear_all(t_data *data);
 int				kill_all(t_data *data);
 
 // FORMATS
-void			bresenham(t_points a, t_points b, t_data *fdf);
+void			draw_bresenham(t_points a, t_points b, t_data *fdf);
 void			draw_lines(t_data *fdf, t_points a, t_points b);
 void			print_fdf(t_data *fdf);
 
 // MATH
-void    		calculate_offset(t_data *fdf);
-void    		isometric(double *x, double *y, int z);
+void    		isometric(double *x, double *y, int z, int angle);
 double			ft_abs(float n);
+void			rotate_x(t_points *a, int angle);
+void			rotate_y(t_points *a, int angle);
+void			rotate_z(t_points *a, int angle);
 
 // UTILS
 void			var_init(t_data *fdf);
+void			apply_size(t_data *fdf, int	flag);
+void			apply_rotate(t_data *fdf, int	flag);
+void			get_next_color(t_data *fdf, int flag);
+void			retore_original_z(t_data *fdf);
 
 #endif

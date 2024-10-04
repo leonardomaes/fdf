@@ -13,7 +13,7 @@
 #include <X11/X.h>
 #include "../fdf.h"
 
-void	bresenham(t_points a, t_points b, t_data *fdf)
+void	draw_bresenham(t_points a, t_points b, t_data *fdf)
 {
 	t_draw	draw;
 	int	steps;
@@ -30,7 +30,10 @@ void	bresenham(t_points a, t_points b, t_data *fdf)
 	{
 		if (a.x >= 0 && a.x < WINDOW_WIDTH && a.y >= 0 && a.y < WINDOW_HEIGHT)
 		{
-			my_mlx_pixel_put(fdf, a.x, a.y, a.color);
+			if (a.color == 0)
+				my_mlx_pixel_put(fdf, a.x, a.y, fdf->map->color);
+			else
+				my_mlx_pixel_put(fdf, a.x, a.y, a.color);
 		}
 		draw.e2 = draw.err;
 		if (draw.e2 > -draw.dx)
@@ -54,18 +57,18 @@ void	draw_lines(t_data *fdf, t_points a, t_points b)
 	a.x = a.x * (fdf->map->width / fdf->map->cols);
 	a.y = a.y * (fdf->map->height / fdf->map->rows);
 	b.x = b.x * (fdf->map->width / fdf->map->cols);
-	b.y = b.y * (fdf->map->height / fdf->map->rows);	
-	isometric(&a.x, &a.y, a.z - fdf->map->zoom);
-	isometric(&b.x, &b.y, b.z - fdf->map->zoom);
+	b.y = b.y * (fdf->map->height / fdf->map->rows);
+	isometric(&a.x, &a.y, a.z, fdf->map->angle);
+	isometric(&b.x, &b.y, b.z, fdf->map->angle);
 	a.x += fdf->map->x_offset;
 	a.y += fdf->map->y_offset;
 	b.x += fdf->map->x_offset;
 	b.y += fdf->map->y_offset;
-	/* if (a.z != 0)
+	if (a.z != 0)
 	{
-		printf("%i", a.z);
-	} */
-	bresenham(a, b, fdf);
+		//printf("%i\n", a.z);
+	}
+	draw_bresenham(a, b, fdf);
 }
 
 void	print_fdf(t_data *fdf)
@@ -82,12 +85,10 @@ void	print_fdf(t_data *fdf)
 		{
 			if (x < fdf->map->rows - 1)
 			{
-				//printf("\n%i ", x);
 				draw_lines(fdf, fdf->points[x][y], fdf->points[x + 1][y]);
 			}
 			if (y < fdf->map->cols - 1)
 			{
-				//printf("- %i", y);
 				draw_lines(fdf, fdf->points[x][y], fdf->points[x][y + 1]);
 			}
 			x++;

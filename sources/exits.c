@@ -42,11 +42,14 @@ void	clear_all(t_data *data)
 {
 	if (!data)
 		return ;
+	mlx_clear_window(data->mlx.mlx, data->mlx.win);
 	mlx_destroy_image(data->mlx.mlx, data->mlx.img);
 	if (data->mlx.win)
 		mlx_destroy_window(data->mlx.mlx, data->mlx.win);
 	if (data->mlx.mlx)
 		mlx_destroy_display(data->mlx.mlx);
+	free_points(data);
+	free(data->mlx.mlx);
 	free(data->map);
 	free(data);
 }
