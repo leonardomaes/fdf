@@ -164,10 +164,10 @@ int	file_check(t_data *fdf)
 	if (fdf->map == NULL)
 		exit(1);
 	fdf->points = fill_points(fdf);
-/* 	printf("\nrows: %i\n", fdf->map->rows);
-	printf("cols: %i\n", fdf->map->cols);
+ 	printf("\nrows - height: %i\n", fdf->map->rows);
+	printf("cols - width: %i\n", fdf->map->cols);
 	printf("X: %f\n", fdf->points[3][3].x);
 	printf("Y: %f\n", fdf->points[3][3].y);
-	printf("Z: %i\n", fdf->points[3][3].z); */
+	printf("Z: %i\n", fdf->points[3][3].z);
 	return (0);
 }

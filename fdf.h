@@ -75,7 +75,7 @@ typedef struct s_info		// Map info
 	double	size;
 	int		angle;
 	int		color;
-	int		size_applyed;
+	int		view;
 }				t_info;
 
 typedef struct s_points		// Matriz dos valores

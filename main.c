@@ -30,7 +30,7 @@ t_data	*init_win(const char *path)
 	free(title);
 	fdf->mlx.img = mlx_new_image(fdf->mlx.mlx, WINDOW_WIDTH, WINDOW_HEIGHT);
 	fdf->mlx.addr = mlx_get_data_addr(fdf->mlx.img, &fdf->mlx.bits_per_pixel, &fdf->mlx.line_length, &fdf->mlx.endian);
-	return (fdf);	
+	return (fdf);
 }
 
 int main(int argc, char *argv[])

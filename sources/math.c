@@ -47,7 +47,6 @@ void rotate_x(t_points *a, int angle)
  a->z = tmp * sin(get_radian(angle)) + a->z * cos(get_radian(angle));
 }
 
-
 void	isometric(double *x, double *y, int z, int angle)
 {
 	double previous_x;

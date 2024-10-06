@@ -20,7 +20,7 @@ void	var_init(t_data *fdf)
 	fdf->map->y_offset = WINDOW_HEIGHT * 1 / 5;
 	fdf->map->angle = 30;
 	fdf->map->color = WHITE_PIXEL;
-	fdf->map->size_applyed = 0;
+	fdf->map->view = 2;
 	retore_original_z(fdf);
 }
 
@@ -101,60 +101,5 @@ void	apply_rotate(t_data *fdf, int	flag)
 			x++;
 		}
 		y++;
-	}
-}
-
-void	apply_size(t_data *fdf, int flag)
-{
-	int	x;
-	int	y;
-	int	changed;  // Variável para verificar se houve alguma mudança em z
-
-	changed = 0;
-	y = 0;
-	while (y < fdf->map->rows)
-	{
-		x = 0;
-		while (x < fdf->map->cols)
-		{
-			if (flag == 1)
-			{
-				if (fdf->points[x][y].z >= 0)
-				{
-					fdf->points[x][y].z += fdf->points[x][y].original_z;
-					changed = 1;
-				}
-				else
-				{
-					fdf->points[x][y].z -= abs(fdf->points[x][y].original_z);
-					changed = 1;
-				}
-			}
-			else if (flag == -1)
-			{
-				if (fdf->map->size_applyed > 0)
-				{
-					if (fdf->points[x][y].z >= 0)
-					{
-						fdf->points[x][y].z -= fdf->points[x][y].original_z;
-						changed = 1;
-					}
-					else
-					{
-						fdf->points[x][y].z += abs(fdf->points[x][y].original_z);
-						changed = 1;
-					}
-				}
-			}
-			x++;
-		}
-		y++;
-	}
-	if (changed)
-	{
-		if (flag == 1)
-			fdf->map->size_applyed++;
-		else if (flag == -1)
-			fdf->map->size_applyed--;
 	}
 }

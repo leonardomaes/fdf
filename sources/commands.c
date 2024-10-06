@@ -67,14 +67,6 @@ void	do_key(int keysym, t_data *fdf)
 		fdf->map->zoom -= 0.1;
 	if (keysym == XK_Shift_L)
 		fdf->map->zoom += 0.1;
-	if (keysym == XK_w)
-	{
-		apply_size(fdf, 1);
-	}
-	if (keysym == XK_s)
-	{
-		apply_size(fdf, -1);
-	}
 	if (keysym == XK_e)
 		fdf->map->angle += 5;
 	if (keysym == XK_q)
@@ -83,14 +75,17 @@ void	do_key(int keysym, t_data *fdf)
 		get_next_color(fdf, -1);
 	if (keysym == XK_d)
 		get_next_color(fdf, 1);
-	
 	if (keysym == XK_1)
-		apply_rotate(fdf, 1);
+	{
+		var_init(fdf);
+		fdf->map->view = 1;
+		fdf->map->x_offset -= 200;
+	}
 	if (keysym == XK_2)
-		apply_rotate(fdf, 2);
-	if (keysym == XK_3)
-		apply_rotate(fdf, 2);
-	
+	{
+		var_init(fdf);
+		fdf->map->view = 2;
+	}
 	if (keysym == XK_r)
 		var_init(fdf);
 }
