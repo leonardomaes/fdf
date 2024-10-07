@@ -12,69 +12,26 @@
 
 #include "../fdf.h"
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
+int	is_key(int key)
 {
-	char	*dst;
-
-	dst = data->mlx.addr + (y * data->mlx.line_length + x * (data->mlx.bits_per_pixel / 8));
-	*(unsigned int*)dst = color;
-}
-
-int	is_key(int	key)
-{
-	return (key == XK_Up || key == XK_Down || key == XK_Left || key == XK_Right \
-			|| key == XK_r || key == XK_Shift_L || key == XK_Control_L\
-			 || key == XK_w || key == XK_s || key == XK_a || key == XK_d\
-			 || key == XK_q || key == XK_e || key == XK_1 || key == XK_2\
-			  || key == XK_3);
+	return (key == XK_Up || key == XK_Down || key == XK_Left || key == XK_Right
+		|| key == XK_r || key == XK_Shift_L || key == XK_Control_L
+		|| key == XK_w || key == XK_s || key == XK_a || key == XK_d
+		|| key == XK_q || key == XK_e || key == XK_1 || key == XK_2
+		|| key == XK_3 || key == XK_KP_Subtract || key == XK_KP_Add
+		|| key == XK_z || key == XK_x);
 }
 
 void	do_key(int keysym, t_data *fdf)
 {
-	if (keysym == XK_Up)
-	{
-		if (fdf->map->cols > 70)
-			fdf->map->y_offset -= 30;
-		else
-			fdf->map->y_offset -= 10;
-	}
-	if (keysym == XK_Down)
-	{
-		if (fdf->map->cols > 70)
-			fdf->map->y_offset += 30;
-		else
-			fdf->map->y_offset += 10;
-	}
-	if (keysym == XK_Left)
-	{
-		if (fdf->map->cols > 70)
-		{
-			fdf->map->x_offset -= 30;
-		}
-		else
-			fdf->map->x_offset -= 10;
-	}
-	if (keysym == XK_Right)
-	{
-		if (fdf->map->cols > 70)
-		{
-			fdf->map->x_offset += 30;
-		}
-		else
-			fdf->map->x_offset += 10;
-	}
-	if (keysym == XK_Control_L && fdf->map->zoom > 0.2)
+	if (keysym == XK_KP_Subtract && fdf->map->zoom > 0.2)
 		fdf->map->zoom -= 0.1;
-	if (keysym == XK_Shift_L)
+	if (keysym == XK_KP_Add)
 		fdf->map->zoom += 0.1;
 	if (keysym == XK_e)
 		fdf->map->angle += 5;
 	if (keysym == XK_q)
 		fdf->map->angle -= 5;
-	if (keysym == XK_a)
-		get_next_color(fdf, -1);
-	if (keysym == XK_d)
-		get_next_color(fdf, 1);
 	if (keysym == XK_1)
 	{
 		var_init(fdf);
@@ -88,9 +45,48 @@ void	do_key(int keysym, t_data *fdf)
 	}
 	if (keysym == XK_r)
 		var_init(fdf);
+	move_keys(keysym, fdf);
+	rotate_keys(keysym, fdf);
 }
 
-// KEYBOARD COMMANDS
+void	move_keys(int key, t_data *fdf)
+{
+	int	i;
+
+	if (fdf->map->cols > 70 || fdf->map->zoom >= 0.9)
+		i = 30;
+	else
+		i = 10;
+	if (key == XK_Up)
+		fdf->map->y_offset -= i;
+	if (key == XK_Down)
+		fdf->map->y_offset += i;
+	if (key == XK_Left)
+		fdf->map->x_offset -= i;
+	if (key == XK_Right)
+		fdf->map->x_offset += i;
+	if (key == XK_Shift_L)
+		apply_size(fdf, 1);
+	if (key == XK_Control_L)
+		apply_size(fdf, -1);
+}
+
+void	rotate_keys(int key, t_data *fdf)
+{
+	if (key == XK_s)
+		fdf->map->alpha -= 0.05;
+	if (key == XK_w)
+		fdf->map->alpha += 0.05;
+	if (key == XK_a)
+		fdf->map->beta -= 0.05;
+	if (key == XK_d)
+		fdf->map->beta += 0.05;
+	if (key == XK_z)
+		fdf->map->gamma -= 0.05;
+	if (key == XK_x)
+		fdf->map->gamma += 0.05;
+}
+
 int	check_key(int keysym, t_data *fdf)
 {
 	if (is_key(keysym))

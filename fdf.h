@@ -33,14 +33,14 @@
 /*					Structs						*/
 /***********************************************/
 
-typedef struct s_draw		 // Bresenham
+typedef struct s_draw // Bresenham
 {
-	int	sx;
-	int	sy;
-	double dx;
-	double dy;
-	int err;
-	int	e2;
+	int		sx;
+	int		sy;
+	double	dx;
+	double	dy;
+	int		err;
+	int		e2;
 }				t_draw;
 
 typedef struct s_offset
@@ -51,48 +51,51 @@ typedef struct s_offset
 	double	max_y;
 }				t_offset;
 
-
-typedef struct s_image		// MLX
+typedef struct s_image // MLX
 {
-	void *img;
-	char *addr;
-	int bits_per_pixel;
-	int line_length;
-	int endian;
-	void *mlx;
-	void *win;
+	void	*img;
+	char	*addr;
+	int		bits_per_pixel;
+	int		line_length;
+	int		endian;
+	void	*mlx;
+	void	*win;
 }				t_image;
 
-typedef struct s_info		// Map info
+typedef struct s_info // Map info
 {
-	int	rows;		// HEIGHT - altura
-	int	cols;		// WIDTH - largura
+	int		rows;		// HEIGHT - altura
+	int		cols;		// WIDTH - largura
+	int		angle;
+	int		color;
+	int		view;
+	int		size_applyed;
 	double	width;
 	double	height;
 	double	zoom;
 	double	x_offset;
 	double	y_offset;
 	double	size;
-	int		angle;
-	int		color;
-	int		view;
+	float	alpha;
+	float	beta;
+	float	gamma;
 }				t_info;
 
-typedef struct s_points		// Matriz dos valores
+typedef struct s_points // Matriz dos valores
 {
-	double x;
-	double y;
-	int z;
-	int	original_z;
-	int color;
+	double	x;
+	double	y;
+	int		z;
+	int		original_z;
+	int		color;
 }				t_points;
 
 typedef struct s_data
 {
 	char		*filename;
-	t_image 	mlx;
+	t_image		mlx;
 	t_info		*map;
-	t_points 	**points;
+	t_points	**points;
 }				t_data;
 
 /***********************************************/
@@ -102,8 +105,6 @@ typedef struct s_data
 // WINDOW SETTINGS
 # define WINDOW_WIDTH 1280
 # define WINDOW_HEIGHT 720
-# define MIDDLE_WIDTH WINDOW_WIDTH / 2
-# define MIDDLE_HEIGHT WINDOW_HEIGHT / 2
 # define MLX_ERROR 1
 // COLORS
 # define PI 3.14159265
@@ -130,7 +131,8 @@ typedef struct s_data
 /***********************************************/
 
 // MAIN
-t_data	*init_win(const char *path);
+t_data			*init_win(const char *path);
+void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 // CHECKERS
 int				count_cols(char *line, int expected_cols);
@@ -140,32 +142,39 @@ t_points		**fill_points(t_data *fdf);
 int				file_check(t_data *fdf);
 
 // COMMANDS
-void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void			rotate_keys(int key, t_data *fdf);
+int				is_key(int key);
+void			do_key(int keysym, t_data *fdf);
 int				check_key(int keysym, t_data *img);
+void			move_keys(int keysym, t_data *fdf);
 
 // EXITS
 void			free_points(t_data *fdf);
 void			free_split(char **data);
-void			clear_all(t_data *data);
-int				kill_all(t_data *data);
+void			clear_all(t_data *fdf);
+int				kill_all(t_data *fdf);
 
 // FORMATS
+void			isometric(double *x, double *y, int z, int angle);
+int				init_param(t_points *a, t_points *b, t_draw *draw);
 void			draw_bresenham(t_points a, t_points b, t_data *fdf);
 void			draw_lines(t_data *fdf, t_points a, t_points b);
 void			print_fdf(t_data *fdf);
 
-// MATH
-void    		isometric(double *x, double *y, int z, int angle);
-double			ft_abs(float n);
-void			rotate_x(t_points *a, int angle);
-void			rotate_y(t_points *a, int angle);
-void			rotate_z(t_points *a, int angle);
-
 // UTILS
+double			get_radian(int angle);
 void			var_init(t_data *fdf);
-void			apply_size(t_data *fdf, int	flag);
-void			apply_rotate(t_data *fdf, int	flag);
-void			get_next_color(t_data *fdf, int flag);
+int				adjust_z_value(t_points *point, int flag, t_data *fdf);
+void			apply_size(t_data *fdf, int flag);
 void			retore_original_z(t_data *fdf);
 
+// CHECKER UTILS
+int				check_cols(char *line, t_info *map);
+int				check_line(int fd, t_info *map);
+int				get_line(t_points **points, t_data *fdf, int fd);
+
+// ROTATE
+void			rotate_x(t_points *a, float alpha);
+void			rotate_y(t_points *a, float beta);
+void			rotate_z(t_points *a, float gamma);
 #endif

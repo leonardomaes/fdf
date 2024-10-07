@@ -12,7 +12,7 @@ PRINTF = includes/ft_printf/libftprintf.a
 #
 SRC =	main.c sources/formats.c sources/commands.c \
 		sources/checkers.c sources/utils.c sources/exits.c \
-		sources/math.c\
+		sources/checker_utils.c sources/rotate.c \
 #
 
 # Commands

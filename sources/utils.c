@@ -19,9 +19,69 @@ void	var_init(t_data *fdf)
 	fdf->map->x_offset = WINDOW_WIDTH * 2 / 5;
 	fdf->map->y_offset = WINDOW_HEIGHT * 1 / 5;
 	fdf->map->angle = 30;
-	fdf->map->color = WHITE_PIXEL;
 	fdf->map->view = 2;
+	fdf->map->size_applyed = 0;
+	fdf->map->alpha = 0;
+	fdf->map->beta = 0;
+	fdf->map->gamma = 0;
 	retore_original_z(fdf);
+}
+
+double	get_radian(int angle)
+{
+	double	radian;
+
+	radian = angle * (PI / 180);
+	return (radian);
+}
+
+int	adjust_z_value(t_points *point, int flag, t_data *fdf)
+{
+	if (flag == 1)
+	{
+		if (point->z >= 0)
+			point->z += point->original_z;
+		else
+			point->z -= abs(point->original_z);
+		return (1);
+	}
+	else if (flag == -1 && fdf->map->size_applyed > 0)
+	{
+		if (point->z >= 0)
+			point->z -= point->original_z;
+		else
+			point->z += abs(point->original_z);
+		return (1);
+	}
+	return (0);
+}
+
+void	apply_size(t_data *fdf, int flag)
+{
+	int	x;
+	int	y;
+	int	changed;
+
+	changed = 0;
+	y = 0;
+	while (y < fdf->map->cols)
+	{
+		x = 0;
+		while (x < fdf->map->rows)
+		{
+			changed = adjust_z_value(&fdf->points[x][y], flag, fdf);
+			x++;
+		}
+		y++;
+	}
+	if (changed)
+	{
+		if (flag == 1)
+			fdf->map->size_applyed++;
+		else if (flag == -1)
+			fdf->map->size_applyed--;
+	}
+	printf("%i\n", fdf->map->size_applyed);
 }
 
 void	retore_original_z(t_data *fdf)
@@ -36,68 +96,6 @@ void	retore_original_z(t_data *fdf)
 		while (x < fdf->map->rows)
 		{
 			fdf->points[x][y].z = fdf->points[x][y].original_z;
-			x++;
-		}
-		y++;
-	}
-}
-
-void	get_next_color(t_data *fdf, int flag)
-{
-	if (flag == 1)
-	{
-		if (fdf->map->color == WHITE_PIXEL)
-			fdf->map->color = GREEN_PIXEL;
-		if (fdf->map->color == GREEN_PIXEL)
-			fdf->map->color = BLUE_PIXEL;
-		if (fdf->map->color == BLUE_PIXEL)
-			fdf->map->color = RED_PIXEL;
-		if (fdf->map->color == RED_PIXEL)
-			fdf->map->color = WHITE_PIXEL;
-	}
-	else
-	if (flag == -1)
-	{
-		if (fdf->map->color == WHITE_PIXEL)
-			fdf->map->color = RED_PIXEL;
-		if (fdf->map->color == RED_PIXEL)
-			fdf->map->color = BLUE_PIXEL;
-		if (fdf->map->color == BLUE_PIXEL)
-			fdf->map->color = GREEN_PIXEL;
-		if (fdf->map->color == GREEN_PIXEL)
-			fdf->map->color = WHITE_PIXEL;
-	}
-}
-
-void	apply_rotate(t_data *fdf, int	flag)
-{
-	int	x;
-	int	y;
-
-	y = 0;
-	while (y < fdf->map->cols)
-	{
-		x = 0;
-		while (x < fdf->map->rows)
-		{
-			if (flag == 1)
-			{
-				rotate_x(&fdf->points[x][y], 0);
-				rotate_y(&fdf->points[x][y], 0);
-				rotate_z(&fdf->points[x][y], 0);
-			}
-			if (flag == 2)
-			{
-				rotate_x(&fdf->points[x][y], 90);
-				rotate_y(&fdf->points[x][y], 0);
-				rotate_z(&fdf->points[x][y], 0);
-			}
-			if (flag == 3)
-			{
-				rotate_x(&fdf->points[x][y], 0);
-				rotate_y(&fdf->points[x][y], 90);
-				rotate_z(&fdf->points[x][y], -90);
-			}	
 			x++;
 		}
 		y++;

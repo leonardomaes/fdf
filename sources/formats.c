@@ -10,31 +10,62 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <X11/X.h>
 #include "../fdf.h"
+#include <X11/X.h>
+
+void	isometric(double *x, double *y, int z, int angle)
+{
+	double	previous_x;
+	double	previous_y;
+
+	if (x == NULL || y == NULL)
+	{
+		printf("Erro with isometric function");
+		exit(1);
+	}
+	previous_x = *x;
+	previous_y = *y;
+	*x = (previous_x - previous_y) * cos(get_radian(angle));
+	*y = (previous_x + previous_y) * sin(get_radian(angle)) - z;
+}
+
+int	init_param(t_points *a, t_points *b, t_draw *draw)
+{
+	int	steps;
+
+	draw->dx = fabs(b->x - a->x);
+	draw->dy = fabs(b->y - a->y);
+	if (a->x < b->x)
+		draw->sx = 1;
+	else
+		draw->sx = -1;
+	if (a->y < b->y)
+		draw->sy = 1;
+	else
+		draw->sy = -1;
+	if (draw->dx > draw->dy)
+		draw->err = draw->dx / 2;
+	else
+		draw->err = -draw->dy / 2;
+	if (draw->dx > draw->dy)
+		steps = draw->dx;
+	else
+		steps = draw->dy;
+	return (steps);
+}
 
 void	draw_bresenham(t_points a, t_points b, t_data *fdf)
 {
 	t_draw	draw;
-	int	steps;
-	int	i;
+	int		steps;
+	int		i;
 
-	draw.dx = fabs(b.x - a.x);
-	draw.dy = fabs(b.y - a.y);
-	draw.sx = (a.x < b.x) ? 1 : -1;
-	draw.sy = (a.y < b.y) ? 1 : -1;
-	draw.err = (draw.dx > draw.dy ? draw.dx : -draw.dy) / 2;
-	steps = (draw.dx > draw.dy) ? draw.dx : draw.dy;
+	steps = init_param(&a, &b, &draw);
 	i = 0;
 	while (i <= steps)
 	{
 		if (a.x >= 0 && a.x < WINDOW_WIDTH && a.y >= 0 && a.y < WINDOW_HEIGHT)
-		{
-			if (a.color == 0)
-				my_mlx_pixel_put(fdf, a.x, a.y, fdf->map->color);
-			else
-				my_mlx_pixel_put(fdf, a.x, a.y, a.color);
-		}
+			my_mlx_pixel_put(fdf, a.x, a.y, a.color);
 		draw.e2 = draw.err;
 		if (draw.e2 > -draw.dx)
 		{
@@ -60,6 +91,12 @@ void	draw_lines(t_data *fdf, t_points a, t_points b)
 	b.y = b.y * (fdf->map->height / fdf->map->rows);
 	if (fdf->map->view == 2)
 	{
+		rotate_x(&a, fdf->map->alpha);
+		rotate_y(&a, fdf->map->beta);
+		rotate_z(&a, fdf->map->gamma);
+		rotate_x(&b, fdf->map->alpha);
+		rotate_y(&b, fdf->map->beta);
+		rotate_z(&b, fdf->map->gamma);
 		isometric(&a.x, &a.y, a.z, fdf->map->angle);
 		isometric(&b.x, &b.y, b.z, fdf->map->angle);
 	}
@@ -75,7 +112,8 @@ void	print_fdf(t_data *fdf)
 	int	i;
 	int	j;
 
-	ft_bzero(fdf->mlx.addr, WINDOW_WIDTH * WINDOW_HEIGHT * (fdf->mlx.bits_per_pixel / 8));
+	ft_bzero(fdf->mlx.addr, WINDOW_WIDTH * WINDOW_HEIGHT
+		* (fdf->mlx.bits_per_pixel / 8));
 	i = 0;
 	while (i < fdf->map->cols)
 	{

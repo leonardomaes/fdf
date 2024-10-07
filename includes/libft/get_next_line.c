@@ -4,7 +4,8 @@
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sheila <sheila@student.42.fr>              +#+  +:+       +#+        */
-/*                                                +#+	#+#+#+#+   +#+           */
+/*                                                +#+	#+#+#+#+  
+		+#+           */
 /*   Created: 2023/11/24 19:19:51 by shrodrig          #+#    #+#             */
 /*   Updated: 2024/06/11 17:54:50 by sheila           ###   ########.fr       */
 /*                                                                            */
@@ -80,8 +81,8 @@ char	*ft_read_line(int fd, char *str)
 		bytesread = read(fd, buffer, BUFFER_SIZE);
 		if (bytesread == -1)
 		{
-			free (buffer);
-			free (str);
+			free(buffer);
+			free(str);
 			return (NULL);
 		}
 		buffer[bytesread] = '\0';
@@ -101,7 +102,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	str = ft_read_line (fd, str);
+	str = ft_read_line(fd, str);
 	if (!str)
 		return (NULL);
 	line = ft_get_line(str);
