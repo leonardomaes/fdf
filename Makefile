@@ -1,7 +1,7 @@
 #Compile Options
 NAME = fdf
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
 MLXFLAGS = -L/usr/X11R6/lib -lX11 -lXext -lm
 
 # Directories

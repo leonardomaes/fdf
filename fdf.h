@@ -159,7 +159,7 @@ void			isometric(double *x, double *y, int z, int angle);
 int				init_param(t_points *a, t_points *b, t_draw *draw);
 void			draw_bresenham(t_points a, t_points b, t_data *fdf);
 void			draw_lines(t_data *fdf, t_points a, t_points b);
-void			print_fdf(t_data *fdf);
+int				print_fdf(t_data *fdf);
 
 // UTILS
 double			get_radian(int angle);

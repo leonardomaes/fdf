@@ -20,7 +20,7 @@ void	isometric(double *x, double *y, int z, int angle)
 
 	if (x == NULL || y == NULL)
 	{
-		printf("Erro with isometric function");
+		ft_printf("Erro with isometric function");
 		exit(1);
 	}
 	previous_x = *x;
@@ -107,7 +107,7 @@ void	draw_lines(t_data *fdf, t_points a, t_points b)
 	draw_bresenham(a, b, fdf);
 }
 
-void	print_fdf(t_data *fdf)
+int	print_fdf(t_data *fdf)
 {
 	int	i;
 	int	j;
@@ -133,4 +133,5 @@ void	print_fdf(t_data *fdf)
 		i++;
 	}
 	mlx_put_image_to_window(fdf->mlx.mlx, fdf->mlx.win, fdf->mlx.img, 0, 0);
+	return (0);
 }

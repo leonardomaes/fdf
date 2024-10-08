@@ -81,7 +81,6 @@ void	apply_size(t_data *fdf, int flag)
 		else if (flag == -1)
 			fdf->map->size_applyed--;
 	}
-	printf("%i\n", fdf->map->size_applyed);
 }
 
 void	retore_original_z(t_data *fdf)

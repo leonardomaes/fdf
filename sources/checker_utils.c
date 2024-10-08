@@ -54,14 +54,14 @@ int	check_line(int fd, t_info *map)
 	line = get_next_line(fd);
 	if (!line)
 	{
-		ft_printf("ERROR:\nFile can't be readed!\n");
+		ft_printf("ERROR:File can't be readed!\n");
 		return (1);
 	}
 	while (line)
 	{
 		if (check_cols(line, map) == 1)
 		{
-			ft_printf("ERROR:\nMap in wrong format, check the edges!\n");
+			ft_printf("ERROR:Map in wrong format, check the edges!\n");
 			free(line);
 			return (1);
 		}

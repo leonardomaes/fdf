@@ -91,9 +91,7 @@ int	check_key(int keysym, t_data *fdf)
 {
 	if (is_key(keysym))
 	{
-		mlx_clear_window(fdf->mlx.mlx, fdf->mlx.win);
 		do_key(keysym, fdf);
-		print_fdf(fdf);
 	}
 	if (keysym == XK_Escape)
 	{

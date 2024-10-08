@@ -49,15 +49,15 @@ void	clear_all(t_data *fdf)
 	if (fdf->mlx.mlx)
 		mlx_destroy_display(fdf->mlx.mlx);
 	free(fdf->mlx.mlx);
-	free(fdf->map);
 	free(fdf);
 }
 
 int	kill_all(t_data *fdf)
 {
 	free_points(fdf);
+	free(fdf->map);
 	clear_all(fdf);
-	write(1, "\nClosed\n", 8);
+	write(1, "Closed\n", 8);
 	exit(1);
 	return (0);
 }
