@@ -17,10 +17,10 @@
 /*					Include						*/
 /***********************************************/
 
-# include "includes/ft_printf/ft_printf.h"
-# include "includes/libft/libft.h"
-# include "mlx/mlx.h"
-# include "mlx/mlx_int.h"
+# include "ft_printf/ft_printf.h"
+# include "libft/libft.h"
+# include "../mlx/mlx.h"
+# include "../mlx/mlx_int.h"
 # include <X11/X.h>
 # include <X11/keysym.h>
 # include <math.h>
@@ -68,17 +68,12 @@ typedef struct s_info // Map info
 	int		cols;		// WIDTH - largura
 	int		angle;
 	int		color;
-	int		view;
-	int		size_applyed;
 	double	width;
 	double	height;
 	double	zoom;
 	double	x_offset;
 	double	y_offset;
 	double	size;
-	float	alpha;
-	float	beta;
-	float	gamma;
 }				t_info;
 
 typedef struct s_points // Matriz dos valores
@@ -131,50 +126,38 @@ typedef struct s_data
 /***********************************************/
 
 // MAIN
-t_data			*init_win(const char *path);
-void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
+t_data		*init_win(const char *path);
 
 // CHECKERS
-int				count_cols(char *line, int expected_cols);
-t_info			*read_map(t_data *fdf);
-t_points		*get_data(char	*line, t_data *fdf, int y);
-t_points		**fill_points(t_data *fdf);
-int				file_check(t_data *fdf);
+t_info		*read_map(t_data *fdf);
+t_points	*get_data(char *line, t_data *fdf, int y);
+t_points	**fill_points(t_data *fdf);
+int			file_check(t_data *fdf);
 
-// COMMANDS
-void			rotate_keys(int key, t_data *fdf);
-int				is_key(int key);
-void			do_key(int keysym, t_data *fdf);
-int				check_key(int keysym, t_data *img);
-void			move_keys(int keysym, t_data *fdf);
+// CHECKERS_UTILS
+int			count_cols(char *line, int expected_cols);
+int			check_cols(char *line, t_info *map);
+int			check_line(int fd, t_info *map);
+void		free_point(t_points **points, int y);
+int			get_line(t_points **points, t_data *fdf, int fd);
 
 // EXITS
-void			free_points(t_data *fdf);
-void			free_split(char **data);
-void			clear_all(t_data *fdf);
-int				kill_all(t_data *fdf);
+void		free_points(t_data *fdf);
+void		free_split(char **data);
+void		clear_all(t_data *fdf);
+int			kill_all(t_data *fdf);
 
 // FORMATS
-void			isometric(double *x, double *y, int z, int angle);
-int				init_param(t_points *a, t_points *b, t_draw *draw);
-void			draw_bresenham(t_points a, t_points b, t_data *fdf);
-void			draw_lines(t_data *fdf, t_points a, t_points b);
-int				print_fdf(t_data *fdf);
+void		isometric(double *x, double *y, int z, int angle);
+int			init_param(t_points *a, t_points *b, t_draw *draw);
+void		draw_bresenham(t_points a, t_points b, t_data *fdf);
+void		draw_lines(t_data *fdf, t_points a, t_points b);
+int			print_fdf(t_data *fdf);
 
 // UTILS
-double			get_radian(int angle);
-void			var_init(t_data *fdf);
-int				adjust_z_value(t_points *point, int flag, t_data *fdf);
-void			apply_size(t_data *fdf, int flag);
-void			retore_original_z(t_data *fdf);
+void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
+int			check_key(int keysym, t_data *fdf);
+void		var_init(t_data *fdf);
+double		get_radian(int angle);
 
-// CHECKER UTILS
-int				check_cols(char *line, t_info *map);
-int				check_line(int fd, t_info *map);
-int				get_line(t_points **points, t_data *fdf, int fd);
-
-// ROTATE
-void			rotate_x(t_points *a, float alpha);
-void			rotate_y(t_points *a, float beta);
-void			rotate_z(t_points *a, float gamma);
 #endif

@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmaes <lmaes@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fdf.h"
+#include "../includes/fdf_bonus.h"
 #include <X11/X.h>
 
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
@@ -64,7 +64,7 @@ int	main(int argc, char *argv[])
 	}
 	else
 	{
-		ft_printf("ERROR:\nWrong number of arguments!\n");
+		ft_printf("ERROR:Wrong number of arguments!\n");
 		exit(1);
 	}
 	clear_all(fdf);

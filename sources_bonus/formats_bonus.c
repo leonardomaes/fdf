@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   formats.c                                          :+:      :+:    :+:   */
+/*   formats_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmaes <lmaes@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/fdf.h"
+#include "../includes/fdf_bonus.h"
 #include <X11/X.h>
 
 void	isometric(double *x, double *y, int z, int angle)
@@ -89,8 +89,17 @@ void	draw_lines(t_data *fdf, t_points a, t_points b)
 	a.y = a.y * (fdf->map->height / fdf->map->rows);
 	b.x = b.x * (fdf->map->width / fdf->map->cols);
 	b.y = b.y * (fdf->map->height / fdf->map->rows);
-	isometric(&a.x, &a.y, a.z, fdf->map->angle);
-	isometric(&b.x, &b.y, b.z, fdf->map->angle);
+	if (fdf->map->view == 2)
+	{
+		rotate_x(&a, fdf->map->alpha);
+		rotate_y(&a, fdf->map->beta);
+		rotate_z(&a, fdf->map->gamma);
+		rotate_x(&b, fdf->map->alpha);
+		rotate_y(&b, fdf->map->beta);
+		rotate_z(&b, fdf->map->gamma);
+		isometric(&a.x, &a.y, a.z, fdf->map->angle);
+		isometric(&b.x, &b.y, b.z, fdf->map->angle);
+	}
 	a.x += fdf->map->x_offset;
 	a.y += fdf->map->y_offset;
 	b.x += fdf->map->x_offset;

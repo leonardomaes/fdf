@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checkers.c                                         :+:      :+:    :+:   */
+/*   checkers_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmaes <lmaes@student.42porto.com>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/fdf.h"
+#include "../includes/fdf_bonus.h"
 
 t_info	*read_map(t_data *fdf)
 {
@@ -55,7 +55,7 @@ t_points	*get_data(char *line, t_data *fdf, int y)
 		sep_data = ft_split(data[x], ',');
 		points[x].x = x;
 		points[x].y = y;
-		points[x].z = ft_atoi(sep_data[0]);
+		points[x].original_z = ft_atoi(sep_data[0]);
 		if (sep_data[1])
 			points[x].color = ft_atoi_hex(sep_data[1]);
 		else
@@ -108,5 +108,6 @@ int	file_check(t_data *fdf)
 	fdf->points = fill_points(fdf);
 	if (fdf->points == NULL)
 		return (1);
+	retore_original_z(fdf);
 	return (0);
 }
