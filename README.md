@@ -41,7 +41,7 @@ FDF (Fil de Fer / Wireframe) reads map files containing elevation data and rende
 ## 🚀 Installation
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/fdf.git
+git clone https://github.com/leonardomaes/fdf.git
 cd fdf
 
 # Install MiniLibX (Linux)
